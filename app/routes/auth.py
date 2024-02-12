@@ -1,9 +1,12 @@
-from flask import redirect, url_for, request
+from flask import Blueprint, redirect, url_for, request
 from linebot import LineBotApi
 from linebot.exceptions import LineBotApiError
+from flask import render_template
 import requests
 
-app = Flask(__name__)
+
+# Create a blueprint for auth routes
+bp = Blueprint('auth', __name__)
 
 # Your Channel ID and Channel Secret
 CHANNEL_ID = 'YOUR_CHANNEL_ID'
@@ -16,13 +19,13 @@ LINE_TOKEN_URL = 'https://api.line.me/oauth2/v2.1/token'
 # Your callback URL
 CALLBACK_URL = url_for('callback', _external=True)
 
-@app.route('/login')
+@bp.route('/login')
 def login():
     # Construct the LINE OAuth URL
     line_oauth_url = f"{LINE_OAUTH_URL}?response_type=code&client_id={CHANNEL_ID}&redirect_uri={CALLBACK_URL}&state=12345abcde&scope=profile"
-    return redirect(line_oauth_url)
+    return render_template('login.html', line_oauth_url=line_oauth_url)
 
-@app.route('/auth/callback')
+@bp.route('/auth/callback')
 def callback():
     # Get the authorization code from the request
     code = request.args.get('code')
