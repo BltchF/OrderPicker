@@ -3,14 +3,15 @@ from linebot import LineBotApi
 from linebot.exceptions import LineBotApiError
 from flask import render_template
 import requests
+import os
 
 
 # Create a blueprint for auth routes
 bp = Blueprint('auth', __name__)
 
 # Your Channel ID and Channel Secret
-CHANNEL_ID = 'YOUR_CHANNEL_ID'
-CHANNEL_SECRET = 'YOUR_CHANNEL_SECRET'
+line_login_channel_id = os.getenv('LINE_LOGIN_CHANNEL_ID')
+line_login_channel_secret = os.getenv('LINE_LOGIN_CHANNEL_SECRET')
 
 # LINE's OAuth and token endpoints
 LINE_OAUTH_URL = 'https://access.line.me/oauth2/v2.1/authorize'
@@ -25,6 +26,8 @@ def login():
     line_oauth_url = f"{LINE_OAUTH_URL}?response_type=code&client_id={CHANNEL_ID}&redirect_uri={CALLBACK_URL}&state=12345abcde&scope=profile"
     return render_template('login.html', line_oauth_url=line_oauth_url)
 
+from app.models import User
+
 @bp.route('/auth/callback')
 def callback():
     # Get the authorization code from the request
@@ -36,7 +39,18 @@ def callback():
     # Optionally, get the user profile using the access token
     try:
         profile = LineBotApi(access_token).get_profile()
+
         # Use profile information to create or update the user in your database
+        user = User.query.filter_by(line_user_id=profile.user_id).first()
+        if user is None:
+            # Create a new user
+            user = User(line_user_id=profile.user_id, name=profile.display_name)
+            db.session.add(user)
+        else:
+            # Update the existing user
+            user.name = profile.display_name
+
+        db.session.commit()
     except LineBotApiError as e:
         # Handle error
         pass

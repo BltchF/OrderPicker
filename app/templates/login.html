@@ -1,12 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Page</title>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </head>
-<body>
-    <h1>Login</h1>
-    <a href="{{ line_oauth_url }}">
-        <img src="https://cdn.lineicons.com/2.0/LineIcons.woff2" alt="Line Icon">
-    </a>
+<body class="d-flex align-items-center justify-content-center vh-100">
+<div class="card p-4 shadow">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <!-- Login form goes here -->
+                <button class="btn btn-light mb-4"><i class="fas fa-arrow-left"></i></button>
+                <h2 class="text-center font-weight-bold mb-6">Welcome back! Glad to see you, Again!</h2>
+                <div class="mb-4">
+                    <input type="email" placeholder="Enter your email" class="form-control">
+                    <input type="password" placeholder="Enter your password" class="form-control mt-2">
+                    <a href="#" class="text-primary text-sm float-right mt-2">Forgot Password?</a>
+                </div>
+                <button class="btn btn-dark btn-block py-2 mt-6">Login</button>
+                <p class="text-center mt-4 text-muted">Or Login with</p>
+                <div class="d-flex justify-content-center mt-4">
+                    <a href="{{ line_oauth_url }}">
+                        <img src="https://cdn.lineicons.com/2.0/LineIcons.woff2" alt="Line Icon" class="h-5 w-5">
+                    </a>
+                </div>
+                <p class="text-center mt-6 text-sm text-muted">Don't have an account? <a href="#" class="text-primary">Register Now</a></p>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
+

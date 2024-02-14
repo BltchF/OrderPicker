@@ -2,13 +2,15 @@ from flask import Blueprint, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
+import os
 
 # Create a blueprint for bot routes
 bp = Blueprint('bot', __name__)
 
 # Replace with your channel access token and channel secret
-line_bot_api = LineBotApi('YOUR_CHANNEL_ACCESS_TOKEN')
-handler = WebhookHandler('YOUR_CHANNEL_SECRET')
+line_bot_api = LineBotApi(os.getenv('LINE_MESSAGING_CHANNEL_ACCESS_TOKEN'))
+handler = WebhookHandler(os.getenv('LINE_MESSAGING_CHANNEL_SECRET'))
+
 
 # Message-reply mapping
 message_reply_mapping = {
@@ -48,4 +50,7 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text="Sorry, I didn't understand that. Send 'help' for assistance.")
         )
+
+
+
 

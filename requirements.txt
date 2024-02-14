@@ -1,3 +1,4 @@
 flask
 line-bot-sdk
 flask_sqlalchemy
+python-dotenv==0.19.1

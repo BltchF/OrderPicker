@@ -1,2 +1,4 @@
 /bin/
 /tmp/
+run_local.py
+.env
