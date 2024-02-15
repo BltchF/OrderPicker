@@ -1,0 +1,121 @@
+.container {
+    width: 100%;
+    height: 100%;
+    background: black;
+    border-radius: 18px;
+    overflow: hidden;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    color: #5580A7;
+    font-size: 32px;
+    font-family: Inter;
+    font-weight: 700;
+    line-height: 36px;
+    /* Add more styles as needed */
+}
+
+.store-list {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* Space between stores */
+}
+
+.store {
+    background: #5B5B5B;
+    border-radius: 22px;
+    display: flex;
+    gap: 20px;
+    /* Space between image and text */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.store img {
+    width: 124px;
+    height: 124px;
+}
+
+.store-info {
+    color: white;
+    font-size: 18px;
+    font-family: Inter;
+    font-weight: 400;
+    line-height: 18px;
+}
+
+.footer {
+    color: white;
+    font-size: 18px;
+    font-family: Inter;
+    font-weight: 400;
+    line-height: 18px;
+    /* Add more styles as needed */
+}
+
+.container {
+    width: 430px;
+    height: 932px;
+    background: black;
+    border-radius: 18px;
+    overflow: hidden;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    color: #5580A7;
+    font-size: 32px;
+    font-family: Inter;
+    font-weight: 700;
+    line-height: 36px;
+    /* Add more styles as needed */
+}
+
+.store-list {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* Space between stores */
+}
+
+.store {
+    background: #5B5B5B;
+    border-radius: 22px;
+    display: flex;
+    gap: 20px;
+    /* Space between image and text */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.store img {
+    width: 124px;
+    height: 124px;
+}
+
+.store-info {
+    color: white;
+    font-size: 18px;
+    font-family: Inter;
+    font-weight: 400;
+    line-height: 18px;
+}
+
+.footer {
+    color: white;
+    font-size: 18px;
+    font-family: Inter;
+    font-weight: 400;
+    line-height: 18px;
+    /* Add more styles as needed */
+}

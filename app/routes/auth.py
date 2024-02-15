@@ -10,8 +10,8 @@ import os
 bp = Blueprint('auth', __name__)
 
 # Your Channel ID and Channel Secret
-line_login_channel_id = os.getenv('LINE_LOGIN_CHANNEL_ID')
-line_login_channel_secret = os.getenv('LINE_LOGIN_CHANNEL_SECRET')
+LINE_LOGIN_CHANNEL_ID = os.getenv('LINE_LOGIN_CHANNEL_ID')
+LINE_LOGIN_CHANNEL_SECRET = os.getenv('LINE_LOGIN_CHANNEL_SECRET')
 
 # LINE's OAuth and token endpoints
 LINE_OAUTH_URL = 'https://access.line.me/oauth2/v2.1/authorize'
@@ -64,8 +64,8 @@ def exchange_code_for_token(code):
         'grant_type': 'authorization_code',
         'code': code,
         'redirect_uri': CALLBACK_URL,
-        'client_id': CHANNEL_ID,
-        'client_secret': CHANNEL_SECRET
+        'client_id': LINE_LOGIN_CHANNEL_IDCHANNEL_ID,
+        'client_secret': LINE_LOGIN_CHANNEL_SECRETCHANNEL_SECRET
     })
 
     # Parse the JSON response and return the access token
