@@ -1,22 +1,67 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block title %}
-Home
-{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
 
-{% block content %}
-<div class="container">
-    <div class="header">歐德皮克 Order Picker</div>
-    <div class="store-list">
-        <div class="store">
-            <img src="https://via.placeholder.com/124x124" />
-            <div class="store-info">
-                <h2>享樂早餐店</h2>
-                <p>老闆說復興崗的孩子飲料大杯中價，免費升級。</p>
+<body>
+    <div class="container bg-black rounded-lg overflow-hidden">
+        <div class="row px-6 py-4">
+            <div class="col-12">
+                <h1 class="text-blue-500 font-bold text-4xl">歐德皮克</h1>
+                <h2 class="text-blue-500 text-xl">Order Picker</h2>
             </div>
         </div>
-        <!-- Repeat the .store div for each store -->
+
+        <div class="row bg-gray-800 rounded-lg px-4 py-3">
+            <div class="col-12 d-flex flex-row gap-2">
+                <div class="bg-white rounded-full px-4 py-2 d-flex align-items-center">
+                    <p class="text-black text-lg">還沒有想到 1</p>
+                </div>
+                <div class="bg-gray-200 rounded-full px-4 py-2 d-flex align-items-center">
+                    <p class="text-black text-lg">還沒有想到 2</p>
+                </div>
+                <div class="bg-gray-200 rounded-full px-4 py-2 d-flex align-items-center">
+                    <p class="text-black text-lg">還沒有想到 3</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row px-6 py-4">
+            <h3 class="text-white text-2xl">功能/店家 清單</h3>
+        </div>
+
+        {% for store in stores %}
+        <div class="row px-6 py-4">
+            <div class="col-12">
+                <a href="order.html?store={{ store[0] }}" class="text-decoration-none">
+                    <div class="bg-gray-700 rounded-lg p-4">
+                        <div class="row">
+                            <div class="col-4">
+                                <img class="w-full h-auto" src="{{ store[2] }}" alt="Image">
+                            </div>
+                            <div class="col-8">
+                                <h4 class="text-white text-2xl">{{ store[0] }}</h4>
+                                <p class="text-white text-lg">{{ store[1] }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="row px-6 py-4">
+            <div class="col-12">
+                <p class="text-white text-lg">©️ 2024 2c04 & Co. IMS All Right Preserved.</p>
+            </div>
+        </div>
     </div>
-    <div class="footer">©️ 2024 2c04 & Co. IMS All Right Preserved.</div>
-</div>
-{% endblock %}
+</body>
+
+</html>

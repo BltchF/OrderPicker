@@ -1,26 +1,23 @@
 from flask import Flask, redirect, url_for
+from config import Config
 from flask_sqlalchemy import SQLAlchemy
-from .routes import auth, bot, order
+from app.auth import bp as auth_bp
+from app.bot import bp as bot_bp
+from app.order import bp as order_bp
 
-# Initialize the database
-db = SQLAlchemy()
+app = Flask(__name__)
+app.config.from_object(Config)
 
-def create_app():
-    app = Flask(__name__)
+db = SQLAlchemy(app)
 
-    # Load the configuration
-    app.config.from_object('config.Config')
+app.register_blueprint(auth_bp)
+app.register_blueprint(bot_bp)
+app.register_blueprint(order_bp)
 
-    # Initialize the database with the app
-    db.init_app(app)
+@app.route('/')
+def index():
+    return redirect(url_for('auth.login'))  
+# Replace 'auth.login' with the endpoint of your login view
 
-    # Register the blueprints
-    app.register_blueprint(auth.bp)
-    app.register_blueprint(bot.bp)
-    app.register_blueprint(order.bp)
-
-    @app.route('/')
-    def index():
-        return redirect(url_for('auth.login'))  # Redirect to the login page
-
-    return app
+from app.modules import store, user, order
+# Import routes and models at the end to avoid circular imports

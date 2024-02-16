@@ -1,13 +1,12 @@
-from flask_sqlalchemy import SQLAlchemy
-from app import app
-
-db = SQLAlchemy(app)
+from app import db
 
 class User(db.Model):
+    __tablename__ = 'users'
+
     id = db.Column(db.Integer, primary_key=True)
-    line_user_id = db.Column(db.String(255), unique=True, nullable=False)
-    username = db.Column(db.String(255), nullable=True)
-    # You can add more fields as needed
+    name = db.Column(db.String(255), nullable=False)
+    line_id = db.Column(db.String(255), unique=True, nullable=False)
+    privilege = db.Column(db.String(255), default='user')
 
     def __repr__(self):
-        return f'<User {self.username}>'
+        return f'<User {self.name}>'
