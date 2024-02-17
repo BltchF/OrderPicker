@@ -4,12 +4,25 @@ from linebot.exceptions import LineBotApiError
 import requests
 import os
 from app import db
-from app.models import User
+from app.models import user
+from flask import render_template
 
 bp = Blueprint('auth', __name__)
 
 LINE_TOKEN_URL = 'https://api.line.me/oauth2/v2.1/token'
 CALLBACK_URL = 'https://your-app-url/auth/callback'  # Replace with your app's callback URL
+
+@bp.route('/login', methods=['GET', 'POST'])
+def login():
+    # Your login logic here
+
+    channel_id = os.getenv('LINE_LOGIN_CHANNEL_ID')
+    callback_url = os.getenv('LINE_LOGIN_CALLBACK_URL')
+    state = os.getenv('LINE_LOGIN_STATE')  # Replace with your method for generating a state string
+
+    line_oauth_url = f'https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id={channel_id}&redirect_uri={callback_url}&state={state}&scope=profile%20openid%20email'
+
+    return render_template('login.html', line_oauth_url=line_oauth_url)
 
 @bp.route('/auth/callback')
 def callback():
@@ -48,32 +61,9 @@ def callback():
 
 @bp.route('/logout')
 def logout():
-    session.pop('user_id', None)
-    return redirect(url_for('index'))
-
-def exchange_code_for_token(code):
-    # Make a POST request to the LINE token endpoint
-    response = requests.post(LINE_TOKEN_URL, data={
-        'grant_type': 'authorization_code',
-        'code': code,
-        'redirect_uri': CALLBACK_URL,
-        'client_id': os.getenv('LINE_LOGIN_CHANNEL_ID'),
-        'client_secret': os.getenv('LINE_LOGIN_CHANNEL_SECRET')
-    })
-
-    # Check the response status
-    if response.status_code != 200:
-        # Log the error and return None
-        print(f"Error exchanging code for token: {response.status_code}, {response.text}")
-        return None
-
-    # Parse the JSON response and return the access token
-    return response.json().get('access_token')
-
-@bp.route('/logout')
-def logout():
     # Remove the user_id from the session
     session.pop('user_id', None)
 
     # Redirect to the login page
     return redirect(url_for('auth.login'))
+

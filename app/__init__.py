@@ -19,5 +19,5 @@ def index():
     return redirect(url_for('auth.login'))  
 # Replace 'auth.login' with the endpoint of your login view
 
-from app.modules import store, user, order
+from app.modules import order_list, store, user
 # Import routes and models at the end to avoid circular imports
