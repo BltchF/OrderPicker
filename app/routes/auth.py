@@ -4,13 +4,12 @@ from linebot.exceptions import LineBotApiError
 import requests
 import os
 from app import db
-from app.models import user
+from app.models import User
 from flask import render_template
 
 bp = Blueprint('auth', __name__)
 
 LINE_TOKEN_URL = 'https://api.line.me/oauth2/v2.1/token'
-CALLBACK_URL = 'https://your-app-url/auth/callback'  # Replace with your app's callback URL
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -25,7 +24,9 @@ def login():
     return render_template('login.html', line_oauth_url=line_oauth_url)
 
 @bp.route('/auth/callback')
+# Listing for set CALLBACK_URL
 def callback():
+    CALLBACK_URL = request.url_root.strip('/')  # listing on callback url
     code = request.args.get('code')
     
     response = requests.post(LINE_TOKEN_URL, data={
@@ -44,9 +45,9 @@ def callback():
     try:
         profile = LineBotApi(access_token).get_profile()
 
-        user = User.query.filter_by(line_id=profile.user_id).first()
+        user = user.query.filter_by(line_id=profile.user_id).first()
         if user is None:
-            user = User(line_id=profile.user_id, name=profile.display_name)
+            user = user(line_id=profile.user_id, name=profile.display_name)
             db.session.add(user)
         else:
             user.name = profile.display_name

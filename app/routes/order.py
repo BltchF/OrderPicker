@@ -1,16 +1,10 @@
 from flask import Blueprint, render_template, session, request, redirect, url_for
-from app.models.store import Order, Store
+from app.models import Order, Store
 
 bp = Blueprint('order', __name__, url_prefix='/order')
-'''
-what line 4 means:
-- Blueprint is a class that helps create a blueprint object
-- 'order' is the name of the blueprint
-- __name__ is the name of the current module
-- url_prefix='/order' is the URL prefix for all the routes defined in the blueprint
-'''
 
-@order.route('/')
+
+@bp.route('/')
 def index():
     # Check if a user is in the session
     if 'user_id' not in session:

@@ -1,4 +1,4 @@
-from flask import Blueprint, request, abort
+from flask import Blueprint, request, abort, url_for
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
@@ -11,12 +11,14 @@ bp = Blueprint('bot', __name__)
 line_bot_api = LineBotApi(os.getenv('LINE_MESSAGING_CHANNEL_ACCESS_TOKEN'))
 handler = WebhookHandler(os.getenv('LINE_MESSAGING_CHANNEL_SECRET'))
 
-
-# Message-reply mapping
-message_reply_mapping = {
-    "take my order": "please visit https://mm.cg",
-    "help": "Send 'Take my order' to get the order link."
-}
+# Message-reply mapping --> called by handle_message
+def get_message_reply_mapping():
+    login_url = url_for('auth.login', _external=True)
+    return {
+        "I wanna order": f"please visit {login_url}",
+        "help": "Send 'Take my order' to get the order link."
+        # Add more mappings here as needed
+    }
 
 @bp.route("/callback", methods=['POST'])
 def callback():
@@ -34,8 +36,11 @@ def callback():
         abort(400)
     return 'OK'
 
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    message_reply_mapping = get_message_reply_mapping()
+
     received_text = event.message.text.lower()  # Convert to lowercase to standardize the keys
     reply_message = message_reply_mapping.get(received_text)
 
@@ -43,12 +48,6 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=reply_message)
-        )
-    else:
-        # Default response for unrecognized messages
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text="Sorry, I didn't understand that. Send 'help' for assistance.")
         )
 
 
