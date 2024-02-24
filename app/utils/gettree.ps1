@@ -1,12 +1,13 @@
 function Get-Tree {
     param (
         [string]$Path = "..\..\..\2_order_picker",
-        [string]$Indent = ""
+        [string]$Indent = "",
+        [string[]] $Exclude = @("__pycache__", ".git", "tmp", ".vscode", ".pytest_cache", "tests")
     )
 
     $children = Get-ChildItem -Path $Path
     $children | ForEach-Object {
-        if ($_.Name -ne "__pycache__" -and $_.Name -ne ".git") {
+        if ($Exclude -notcontains $_.Name) {
             if ($_ -eq $children[-1]) {
                 # Last item
                 if ($_.PSIsContainer) {

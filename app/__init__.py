@@ -7,6 +7,7 @@ from .extensions import db
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
+    app.secret_key = app.config['FLASK_SECRET_KEY']
 
     # Initialize the SQLAlchemy object
     db.init_app(app)

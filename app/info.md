@@ -4,7 +4,8 @@ project tree as below:
 ├ 📁app
 │   ├ 📁models
 │   │   ├ 📄store.py
-│   │   └ 📄user.py
+│   │   ├ 📄user.py
+│   │   └ 📄__init__.py
 │   ├ 📁routes
 │   │   ├ 📄auth.py
 │   │   ├ 📄bot.py
@@ -21,14 +22,14 @@ project tree as below:
 │   │   ├ 📄login.html
 │   │   ├ 📄order.html
 │   │   └ 📄summary.html
-│   ├ 📁tests
-│   │   └ 📄text_template.py
 │   ├ 📁utils
+│   │   ├ 📄db_config.py
 │   │   ├ 📄gettree.bat
 │   │   ├ 📄gettree.ps1
-│   │   └ 📄line_helper.py
+│   │   ├ 📄line_helper.py
+│   │   └ 📄test_db.py
 │   ├ 📄extensions.py
-│   ├ 📄info.txt
+│   ├ 📄info.md
 │   └ 📄__init__.py
 ├ 📁bin
 ├ 📄.env
@@ -54,6 +55,7 @@ one is messaging API channel use for bot that can invited into group than it's m
 
 
 # database design
+
 ```
 1. `users` table: Stores user data.
     - `id`: Primary key

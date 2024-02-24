@@ -6,20 +6,26 @@ import os
 from app import db
 from app.models import User
 from flask import render_template
+import secrets
 
 bp = Blueprint('auth', __name__)
 
 LINE_TOKEN_URL = 'https://api.line.me/oauth2/v2.1/token'
+CHANNEL_ID = os.getenv('LINE_LOGIN_CHANNEL_ID')
+CHANNEL_SECRET = os.getenv('LINE_LOGIN_CHANNEL_SECRET')
+CALLBACK_URL = os.getenv('LINE_LOGIN_CALLBACK_URL')
+
+
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
-    # Your login logic here
+    # login logic here
 
-    channel_id = os.getenv('LINE_LOGIN_CHANNEL_ID')
-    callback_url = os.getenv('LINE_LOGIN_CALLBACK_URL')
-    state = os.getenv('LINE_LOGIN_STATE')  # Replace with your method for generating a state string
+    # Replace with your method for generating a state string
+    state = secrets.token_urlsafe(16)
+    session['state'] = state
 
-    line_oauth_url = f'https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id={channel_id}&redirect_uri={callback_url}&state={state}&scope=profile%20openid%20email'
+    line_oauth_url = f'https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id={CHANNEL_ID}&redirect_uri={CALLBACK_URL}&state={state}&scope=profile%20openid%20email'
 
     return render_template('login.html', line_oauth_url=line_oauth_url)
 
@@ -28,6 +34,11 @@ def login():
 def callback():
     CALLBACK_URL = request.url_root.strip('/')  # listing on callback url
     code = request.args.get('code')
+    state = request.args.get('state')
+
+    # Verify the state to prevent CSRF attacks
+    if state != session.get('state'):                
+        return redirect(url_for('error'))
     
     response = requests.post(LINE_TOKEN_URL, data={
         'grant_type': 'authorization_code',
@@ -43,18 +54,32 @@ def callback():
     access_token = response.json().get('access_token')
 
     try:
-        profile = LineBotApi(access_token).get_profile()
+        profile_endpoint = 'https://api.line.me/v2/profile'
+        headers = {'Authorization': f'Bearer {access_token}'}
+        profile_response = requests.get(profile_endpoint, headers=headers)
+        
+        if profile_response.status_code != 200:
+            return redirect(url_for('error'))
+        
+        profile_data = profile_response.json()
 
-        user = user.query.filter_by(line_id=profile.user_id).first()
-        if user is None:
-            user = user(line_id=profile.user_id, name=profile.display_name)
-            db.session.add(user)
+        # store the relevant user data in the database
+        existing_user = User.query.filter_by(line_id=profile_data['userId']).first()
+        if existing_user is None:
+            new_user = User(
+                line_id=profile_data['userId'],
+                name=profile_data['displayName'],
+                picture_url=profile_data['pictureUrl']
+                privilege='user'
+            )
+            db.session.add(new_user)
         else:
-            user.name = profile.display_name
+            existing_user.name = profile_data['displayName']
+            existing_user.picture_url = profile_data['pictureUrl']
 
         db.session.commit()
 
-        session['user_id'] = user.id
+        session['user_id'] = existing_user.id
     except LineBotApiError as e:
         return redirect(url_for('error'))
 
