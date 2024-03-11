@@ -1,6 +1,7 @@
 from flask import Flask, redirect, url_for
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from .extensions import db
 
 
@@ -11,6 +12,9 @@ def create_app(config_class=Config):
 
     # Initialize the SQLAlchemy object
     db.init_app(app)
+
+    # Initialize the Migrate object
+    migrate = Migrate(app, db)
 
     # Adjusted import paths to reflect the actual location of the Blueprints
     from app.routes.auth import bp as auth_bp

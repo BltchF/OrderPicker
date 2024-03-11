@@ -1,4 +1,4 @@
-from flask import Blueprint, request, abort, url_for
+from flask import Blueprint, request, abort, url_for, current_app
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
@@ -27,7 +27,7 @@ def callback():
 
     # Get request body as text
     body = request.get_data(as_text=True)
-    bp.logger.info("Request body: " + body)
+    current_app.logger.info("Request body: " + body)
 
     # Handle webhook body
     try:

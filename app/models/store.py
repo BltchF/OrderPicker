@@ -17,7 +17,7 @@ class Menu(db.Model):
     store_id = db.Column(db.Integer, db.ForeignKey('stores.id'), nullable=False)
     item_name = db.Column(db.String(128), nullable=False)
     price = db.Column(db.Numeric(10, 2))
-    size = db.Column(db.Enum('small', 'medium', 'large'), nullable=False)
+    size = db.Column(db.Enum('small', 'medium', 'large',name='size_enum'), nullable=False)
     additional_option = db.Column(db.JSON)
     category = db.Column(db.String(128), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -28,7 +28,7 @@ class Order(db.Model):
     order_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     store_id = db.Column(db.Integer, db.ForeignKey('stores.id'), nullable=False)
-    status = db.Column(db.Enum('pending', 'completed', 'cancelled'), nullable=False)
+    status = db.Column(db.Enum('pending', 'completed', 'cancelled',name='status_enum'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

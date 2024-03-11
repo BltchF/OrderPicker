@@ -69,7 +69,7 @@ def callback():
             new_user = User(
                 line_id=profile_data['userId'],
                 name=profile_data['displayName'],
-                picture_url=profile_data['pictureUrl']
+                picture_url=profile_data['pictureUrl'],
                 privilege='user'
             )
             db.session.add(new_user)

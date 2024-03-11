@@ -14,6 +14,7 @@ project tree as below:
 │   │   ├ 📁css
 │   │   │   └ 📄style.css
 │   │   ├ 📁images
+│   │   │   ├ 📄favicon.ico
 │   │   │   └ 📄orderpicker.svg
 │   │   └ 📁js
 │   ├ 📁templates
@@ -22,12 +23,6 @@ project tree as below:
 │   │   ├ 📄login.html
 │   │   ├ 📄order.html
 │   │   └ 📄summary.html
-│   ├ 📁utils
-│   │   ├ 📄db_config.py
-│   │   ├ 📄gettree.bat
-│   │   ├ 📄gettree.ps1
-│   │   ├ 📄line_helper.py
-│   │   └ 📄test_db.py
 │   ├ 📄extensions.py
 │   ├ 📄info.md
 │   └ 📄__init__.py
@@ -43,14 +38,29 @@ project tree as below:
 ```
 # app purpose as below:
 ```
-this project has features below:
+this project has information below
+deployment:
 1. this project is develop locally using ngrok. i placed this in run_loacal.py under root directory. another deploy version of entry is run.py placed in the same directory as well.
 2. this project would eventually hosted on heroku. and using it's plugin of postgres. i have put it's url into config.py.
+
+configuration:
 3. this project contains two LINE channel.
 one is messaging API channel use for bot that can invited into group than it's main purpose is throwing the link of flask app entry into the group when receiving sepecific message.
 4. all the sensitive information has set into nor ".env" to develop locally or environment variable of heroku.
+
+user intereact:
 5. when user login via LINE login channel. they can perform "choice store" at index.html. then with specific store access "order.html". they will take orders here. session starts from user's login.
 6. the app then collect ordering from different users. when the last user trigger complete ordering. the bot then pass whole the order_list back to their line group.
+
+for detail explaination:
+1. files:
+    entry: one for production environment(heroku)-> run.py
+        one for local test -> run_local.py
+    initialization : project/app/__init__.py
+    authentication logic : project/app/route/auth.py
+    messaging api channel: project/app/route/bot.py
+    database models: project/app/models/*.py
+
 ```
 
 
