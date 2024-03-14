@@ -8,8 +8,8 @@ class Store(db.Model):
     name = db.Column(db.String(128), nullable=False)
     phone_number = db.Column(db.String(64))
     description = db.Column(db.String(255))
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.datatime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.datatime.utcnow), onupdate=datetime.datatime.utcnow))
 
 class Menu(db.Model):
     __tablename__ = 'menus'
@@ -20,8 +20,8 @@ class Menu(db.Model):
     size = db.Column(db.Enum('small', 'medium', 'large',name='size_enum'), nullable=False)
     additional_option = db.Column(db.JSON)
     category = db.Column(db.String(128), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.datatime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.datatime.utcnow), onupdate=datetime.datatime.utcnow))
 
 class Order(db.Model):
     __tablename__ = 'orders'
@@ -29,8 +29,8 @@ class Order(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     store_id = db.Column(db.Integer, db.ForeignKey('stores.id'), nullable=False)
     status = db.Column(db.Enum('pending', 'completed', 'cancelled',name='status_enum'), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.datatime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.datatime.utcnow), onupdate=datetime.datatime.utcnow))
 
 class OrderItem(db.Model):
     __tablename__ = 'order_items'
@@ -39,5 +39,5 @@ class OrderItem(db.Model):
     menu_id = db.Column(db.Integer, db.ForeignKey('menus.item_id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     customizations = db.Column(db.JSON)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.datatime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.datatime.utcnow), onupdate=datetime.datatime.utcnow))

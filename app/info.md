@@ -36,6 +36,33 @@ project tree as below:
 ├ 📄run.py
 └ 📄run_local.py
 ```
+# data_seeding
+store:
+- joy-breakfast 
+- earlyer-coming-breakfast
+- skeleton-breakfast
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # app purpose as below:
 ```
 this project has information below

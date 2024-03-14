@@ -11,14 +11,6 @@ bp = Blueprint('bot', __name__)
 line_bot_api = LineBotApi(os.getenv('LINE_MESSAGING_CHANNEL_ACCESS_TOKEN'))
 handler = WebhookHandler(os.getenv('LINE_MESSAGING_CHANNEL_SECRET'))
 
-# Message-reply mapping --> called by handle_message
-def get_message_reply_mapping():
-    login_url = url_for('auth.login', _external=True)
-    return {
-        "I wanna order": f"please visit {login_url}",
-        "help": "Send 'Take my order' to get the order link."
-        # Add more mappings here as needed
-    }
 
 @bp.route("/callback", methods=['POST'])
 def callback():
@@ -49,7 +41,19 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=reply_message)
         )
+        current_app.logger.info(f"Sent reply message: {reply_message}")
+    else:
+        current_app.logger.info(f"No reply message found for: {received_text}")
 
 
+# Message-reply mapping --> called by handle_message
+def get_message_reply_mapping():
+    login_url = url_for('auth.login', _external=True)
+    return {
+        "i wanna order": f"please visit {login_url}",
+        "help": "Send 'Take my order' to get the order link.",
+        "fuck you": "fuck you too"
+        # Add more mappings here as needed
+    }
 
 

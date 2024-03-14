@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, url_for, request, session
+from flask import Blueprint, redirect, url_for, request, session, jsonify
 from linebot import LineBotApi
 from linebot.exceptions import LineBotApiError
 import requests
@@ -19,9 +19,7 @@ CALLBACK_URL = os.getenv('LINE_LOGIN_CALLBACK_URL')
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
-    # login logic here
-
-    # Replace with your method for generating a state string
+    # generating a state
     state = secrets.token_urlsafe(16)
     session['state'] = state
 
@@ -32,24 +30,30 @@ def login():
 @bp.route('/auth/callback')
 # Listing for set CALLBACK_URL
 def callback():
-    CALLBACK_URL = request.url_root.strip('/')  # listing on callback url
+    # CALLBACK_URL = request.url_root.strip('/')  # CALLBACK_URL應該要是/app/auth/callback
     code = request.args.get('code')
     state = request.args.get('state')
 
     # Verify the state to prevent CSRF attacks
     if state != session.get('state'):                
-        return redirect(url_for('error'))
+        return redirect(url_for('main.error'))
     
-    response = requests.post(LINE_TOKEN_URL, data={
+    # 這邊是要對LINE的API進行post，所以要用requests
+    data={
         'grant_type': 'authorization_code',
         'code': code,
         'redirect_uri': CALLBACK_URL,
-        'client_id': os.getenv('LINE_LOGIN_CHANNEL_ID'),
-        'client_secret': os.getenv('LINE_LOGIN_CHANNEL_SECRET')
-    })
+        'client_id': CHANNEL_ID,
+        'client_secret': CHANNEL_SECRET
+    }
+    print(data)                          # debug
+    response = requests.post(LINE_TOKEN_URL, data=data)
 
+    # 這邊已完成post，下面對response進行處理
+    print("Before checking status code") # debug
     if response.status_code != 200:
-        return redirect(url_for('error'))
+        print(response.json())
+        return redirect(url_for('main.error'))
 
     access_token = response.json().get('access_token')
 
@@ -59,7 +63,7 @@ def callback():
         profile_response = requests.get(profile_endpoint, headers=headers)
         
         if profile_response.status_code != 200:
-            return redirect(url_for('error'))
+            return redirect(url_for('main.error'))
         
         profile_data = profile_response.json()
 
@@ -73,17 +77,18 @@ def callback():
                 privilege='user'
             )
             db.session.add(new_user)
+            db.session.commit()
+            existing_user = new_user
         else:
             existing_user.name = profile_data['displayName']
             existing_user.picture_url = profile_data['pictureUrl']
-
-        db.session.commit()
+            db.session.commit()
 
         session['user_id'] = existing_user.id
     except LineBotApiError as e:
-        return redirect(url_for('error'))
+        return redirect(url_for('main.error'))
 
-    return redirect(url_for('index'))
+    return redirect(url_for('order.index'))
 
 @bp.route('/logout')
 def logout():
@@ -93,3 +98,8 @@ def logout():
     # Redirect to the login page
     return redirect(url_for('auth.login'))
 
+
+# ========== Debugging Delete before deploy ==================
+@bp.route('/debug')
+def debug():
+    return jsonify({"LINE_LOGIN_CALLBACK_URL": {CALLBACK_URL}})
