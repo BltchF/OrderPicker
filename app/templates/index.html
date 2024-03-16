@@ -13,12 +13,14 @@
 <body>
     <div class="container bg-black rounded-lg overflow-hidden">
         <div class="row px-6 py-4">
-            <div class="col-12">
+            <div class="col-8">
                 <h1 class="text-blue-500 font-bold text-4xl">歐德皮克</h1>
                 <h2 class="text-blue-500 text-xl">Order Picker</h2>
             </div>
+            <div class="col-4">
+                <p>H0110W {{username}}</p>
+            </div>
         </div>
-
         <div class="row bg-gray-800 rounded-lg px-4 py-3">
             <div class="col-12 d-flex flex-row gap-2">
                 <div class="bg-white rounded-full px-4 py-2 d-flex align-items-center">
@@ -40,15 +42,17 @@
         {% for store in stores %}
         <div class="row px-6 py-4">
             <div class="col-12">
-                <a href="order.html?store={{ store[0] }}" class="text-decoration-none">
+                <a href="order.html?store={{ store.name }}" class="text-decoration-none">
                     <div class="bg-gray-700 rounded-lg p-4">
                         <div class="row">
                             <div class="col-4">
-                                <img class="w-full h-auto" src="{{ store[2] }}" alt="Image">
+                                <img class="w-full h-auto" 
+                                src="{{ url_for('static', filename='images/' + store.name + '.png') }}" 
+                                alt="{{ url_for('static', filename='alt/' + 'store' + '.png')}}"> 
                             </div>
                             <div class="col-8">
-                                <h4 class="text-white text-2xl">{{ store[0] }}</h4>
-                                <p class="text-white text-lg">{{ store[1] }}</p>
+                                <h4 class="text-white text-2xl">{{ store.name }}</h4>
+                                <p class="text-white text-lg">{{ store.description }}</p>
                             </div>
                         </div>
                     </div>

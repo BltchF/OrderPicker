@@ -47,22 +47,6 @@ store:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # app purpose as below:
 ```
 this project has information below

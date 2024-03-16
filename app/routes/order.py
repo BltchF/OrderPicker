@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, session, request, redirect, url_for
-from app.models import Order, Store
+from app.models import Order, Store, User
 
 bp = Blueprint('order', __name__, url_prefix='/order')
 
@@ -10,29 +10,37 @@ def index():
     if 'user_id' not in session:
         # No user in the session, redirect to login page
         return redirect(url_for('auth.login'))
+    
+    user = User.query.get(session['user_id'])
+    if not user:
+        # User not found, redirect to login page
+        return redirect(url_for('auth.login'))
 
-    # Get all orders
-    orders = Order.query.all()
-    # Get stores with their descriptions.
-    stores = Store.query.with_entities(Store.name, Store.description).all()
+    try:
+        # Get stores with their descriptions.
+        stores = Store.query.with_entities(Store.name, Store.description).all()
+    except Exception as e:
+        # Log the error and redirect to an error page
+        print(e)
+        return redirect(url_for('error_page'))
 
     # Render the index template with the orders and stores
-    return render_template('index.html', orders=orders, stores=stores)
+    return render_template('index.html', stores=stores, username=user.name)
 
-@bp.route('/<store_name>')
-def order(store_name):
-    store = Store.query.filter_by(name=store_name).first()
-    if store:
-        menu = store.get_menu()
-        return render_template('order.html', menu=menu)
-    else:
-        return "Store not found", 404
+@bp.route('/order')
+def order():
+    store_name = request.args.get('store')
+    if not store_name:
+        return redirect(url_for('order.index'))
     
-"""
-this is herf links to order.html from jinja2 template
-```
-  <a href="order.html?store={{ store[0] }}" class="text-decoration-none">
-```
-so i think order.html should be modified
+    try:
+        # Get the store id
+        store = Store.query.filter_by(name=store_name).first()
+    except Exception as e:
+        # Log the error and redirect to an error page
+        print(e)
+        return redirect(url_for('error_page'))
+    
+    return render_template('order.html', store=store)
 
-"""
+
