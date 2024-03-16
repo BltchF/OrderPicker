@@ -21,6 +21,13 @@
                 <p>H0110W {{username}}</p>
             </div>
         </div>
+        <div>
+            <div class="row bg-gray-800 rounded-lg px-4 py-3">
+                <div class="col-12 d-flex flex-row gap-2">
+                    <span>{{message}}</span>
+                </div>
+            </div>
+        </div>
         <div class="row bg-gray-800 rounded-lg px-4 py-3">
             <div class="col-12 d-flex flex-row gap-2">
                 <div class="bg-white rounded-full px-4 py-2 d-flex align-items-center">
@@ -42,7 +49,7 @@
         {% for store in stores %}
         <div class="row px-6 py-4">
             <div class="col-12">
-                <a href="order.html?store={{ store.name }}" class="text-decoration-none">
+                <a href="/order?store={{ store.name }}" class="text-decoration-none">
                     <div class="bg-gray-700 rounded-lg p-4">
                         <div class="row">
                             <div class="col-4">

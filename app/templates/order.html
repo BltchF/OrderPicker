@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/svg+xml">
     <title>Store Order Page</title>
     <!-- Tailwind CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -45,36 +46,36 @@
         <div class="row bg-gray-800">
             <div class="col-4 d-flex justify-content-start align-items-center" style="width: 40%;">
                 <div class="btn bg-gray-200 text-white rounded-full text-6xl">
-                    {{ store_name }}
+                    {{ store.name }}
                 </div>
             </div>
-            <div class="col d-flex justify-content-start align-items-center pl-3">
+            <div class="col d-flex justify-content-start align-items-center pl-3 mt-4">
                 <img src="{{ url_for('static', filename='images/orderpicker.svg') }}" alt="Your Image Description" class="img-fluid">
             </div>
         </div>
         <!-- Buttons -->
         <div class="flex justify-center p-4 space-x-4">
-            <button class="bg-green-800 text-white py-2 px-4 rounded">send order</button>
-            <button class="bg-gray-300 py-2 px-4 rounded">check cart</button>
-            <button class="bg-yellow-300 py-2 px-4 rounded">coming soon</button>
+            <button class="flex-1 bg-green-800 text-white py-2 px-4 rounded text-xs whitespace-nowrap">送出我的單子</button>
+            <button class="flex-1 bg-gray-300 py-2 px-4 rounded text-xs whitespace-nowrap">查看點單</button>
+            <button class="flex-1 bg-yellow-300 py-2 px-4 rounded text-xs whitespace-nowrap">這個功能還沒好</button>
         </div>
 
-        <!-- Category Label -->
-        <div class="bg-gray-800 text-white p-2 text-xl">
-            Pan Cake
-        </div>
-
+{% for category, menus in menus_by_category.items() %}
+    <!-- Category Label -->
+    <div class="bg-gray-800 text-white p-2 text-xl">
+        {{ category }}
+    </div>
+    {% for menu in menus %}
         <!-- Item Name -->
         <div class="flex justify-between items-center p-4">
-            <div class="text-white text-lg">{{ item_name }}</div>
+            <div class="text-white text-lg">{{ menu.item_name }}</div>
             <!-- Options -->
             <div class="flex items-center">
-                <label class="checkbox-inline">
-                    <input type="checkbox" id="spicy" name="spicy"> spicy
-                </label>
-                <label class="checkbox-inline ml-2">
-                    <input type="checkbox" id="sweet" name="sweet"> sweet
-                </label>
+                {% for addition in menu.additions %}
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="{{ addition.add_name }}" name="{{ addition.add_name }}"> {{ addition.add_name }}
+                    </label>
+                {% endfor %}
                 <!-- Quantity Selector -->
                 <div class="input-group ml-2">
                     <div class="input-group-prepend">
@@ -89,6 +90,8 @@
                 </div>
             </div>
         </div>
+    {% endfor %}
+{% endfor %}
 
         <!-- Footer and Complete Order Button -->
         <div class="bg-gray-800 p-4">

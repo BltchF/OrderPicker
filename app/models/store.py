@@ -19,7 +19,6 @@ class Menu(db.Model):
     store_id = db.Column(db.Integer, db.ForeignKey('stores.id'), nullable=False)
     item_name = db.Column(db.String(128), nullable=False)
     price = db.Column(db.Numeric(10, 2))
-    size = db.Column(Enum('small', 'medium', 'large', name='size_enum'), nullable=False)
     category = db.Column(db.String(128), nullable=False)
     additions = db.relationship('Addition', backref='menu', lazy=True)
 
@@ -38,7 +37,6 @@ class Order(db.Model):
     store_id = db.Column(db.Integer, db.ForeignKey('stores.id'), nullable=False)
     status = db.Column(Enum('pending', 'completed', 'cancelled', name='status_enum'), nullable=False)
 
-# 訂單上的項目-考慮刪除中
 class OrderItem(db.Model):
     __tablename__ = 'order_items'
     id = db.Column(db.Integer, primary_key=True)
@@ -46,3 +44,9 @@ class OrderItem(db.Model):
     menu_id = db.Column(db.Integer, db.ForeignKey('menus.item_id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     customizations = db.Column(db.JSON)
+
+class OrderAddition(db.Model):
+    __tablename__ = 'order_additions'
+    id = db.Column(db.Integer, primary_key=True)
+    order_item_id = db.Column(db.Integer, db.ForeignKey('order_items.id'), nullable=False)
+    addition_id = db.Column(db.Integer, db.ForeignKey('additions.id'), nullable=False)

@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, session, request, redirect, url_for
-from app.models import Order, Store, User
+from app.models import Order, Store, User, Menu
+from collections import defaultdict
 
-bp = Blueprint('order', __name__, url_prefix='/order')
+bp = Blueprint('order', __name__)
 
 
 @bp.route('/index')
@@ -36,11 +37,23 @@ def order():
     try:
         # Get the store id
         store = Store.query.filter_by(name=store_name).first()
+        if not store:
+            message = f"Store {store_name} not found"
+            return redirect(url_for('index', message=message))
+        menus = Menu.query.filter_by(store_id=store.id).all()
+        munus_by_category = defaultdict(list)
+        for menu in menus:
+            munus_by_category[menu.category].append(menu)
     except Exception as e:
         # Log the error and redirect to an error page
         print(e)
         return redirect(url_for('error_page'))
     
-    return render_template('order.html', store=store)
+    return render_template('order.html', store=store, menus_by_category=munus_by_category)
 
-
+# ============================這邊待修改============================
+@bp.route('/get_addons/<item_id>')
+def get_addons(item_id):
+    # Query database for addons of the item
+    # ...
+    return jsonify(addons_data)

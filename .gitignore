@@ -3,3 +3,6 @@
 run_local.py
 .env
 app/tests/
+node_modules/
+build/
+dist/

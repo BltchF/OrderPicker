@@ -19,13 +19,7 @@ project tree as below:
 │   │   └ 📁js
 │   ├ 📁templates
 │   │   ├ 📄base.html
-│   │   ├ 📄index.html
-│   │   ├ 📄login.html
-│   │   ├ 📄order.html
-│   │   └ 📄summary.html
-│   ├ 📄extensions.py
-│   ├ 📄info.md
-│   └ 📄__init__.py
+│  └ 📄__init__.py
 ├ 📁bin
 ├ 📄.env
 ├ 📄.gitignore
@@ -34,7 +28,13 @@ project tree as below:
 ├ 📄README.md
 ├ 📄requirements.txt
 ├ 📄run.py
-└ 📄run_local.py
+└ 📄run_local.py │   ├ 📄index.html
+│   │   ├ 📄login.html
+│   │   ├ 📄order.html
+│   │   └ 📄summary.html
+│   ├ 📄extensions.py
+│   ├ 📄info.md
+│   
 ```
 # data_seeding
 store:
