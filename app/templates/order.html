@@ -1,46 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/svg+xml">
+{% block head %}
+    {{ super() }}
     <title>Store Order Page</title>
-    <!-- Tailwind CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Bootstrap CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
-    <style>
-        .stroke-text {
-            text-shadow: 2px 2px 0px #000;
-            /* Simple text stroke effect */
-        }
+{% endblock %}
 
-        .store-button {
-            background-color: #D3D3D3;
-            /* Light gray */
-            border: none;
-            box-shadow: none;
-            font-weight: bold;
-            /* Bold font */
-        }
-    </style>
-    <script>
-        function changeQuantity(increment) {
-            var quantityInput = document.getElementById('quantity');
-            var currentQuantity = parseInt(quantityInput.value, 10);
-            currentQuantity = increment ? currentQuantity + 1 : currentQuantity - 1;
-            currentQuantity = currentQuantity < 0 ? 0 : currentQuantity;
-            quantityInput.value = currentQuantity;
-        }
-    </script>
-</head>
-
-<body>
+{% block content %}
     <div class="container-fluid">
         <!-- Banner -->
         <div class="row bg-gray-800">
@@ -60,38 +25,7 @@
             <button class="flex-1 bg-yellow-300 py-2 px-4 rounded text-xs whitespace-nowrap">這個功能還沒好</button>
         </div>
 
-{% for category, menus in menus_by_category.items() %}
-    <!-- Category Label -->
-    <div class="bg-gray-800 text-white p-2 text-xl">
-        {{ category }}
-    </div>
-    {% for menu in menus %}
-        <!-- Item Name -->
-        <div class="flex justify-between items-center p-4">
-            <div class="text-white text-lg">{{ menu.item_name }}</div>
-            <!-- Options -->
-            <div class="flex items-center">
-                {% for addition in menu.additions %}
-                    <label class="checkbox-inline">
-                        <input type="checkbox" id="{{ addition.add_name }}" name="{{ addition.add_name }}"> {{ addition.add_name }}
-                    </label>
-                {% endfor %}
-                <!-- Quantity Selector -->
-                <div class="input-group ml-2">
-                    <div class="input-group-prepend">
-                        <button class="btn btn-outline-secondary" type="button"
-                            onclick="changeQuantity(false)">-</button>
-                    </div>
-                    <input type="text" id="quantity" class="form-control" value="0">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button"
-                            onclick="changeQuantity(true)">+</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endfor %}
-{% endfor %}
+        <div id="root"></div>
 
         <!-- Footer and Complete Order Button -->
         <div class="bg-gray-800 p-4">
@@ -103,6 +37,8 @@
             </div>
         </div>
     </div>
-</body>
-
-</html>
+    <script>
+        window.storeName = "{{ store.name }}";
+    </script>
+    <script src="{{url_for('static', filename='js/components/build/static/js/main.63a1f366.js')}}"></script>
+{% endblock %}

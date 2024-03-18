@@ -1,17 +1,33 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import React, {useEffect, useState} from 'react';
+import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import Menu from './Menu';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+function App(){
+    const [categories, setCategories] = useState([]);
+    useEffect(() => {
+        fetch(`/api/menus?store=${window.storeName}`)
+            .then(response => response.json())
+            .then(data => setCategories(data));
+    }, []);
+    return (
+        <React.StrictMode>
+            {categories.map(category => (
+                <div key={category.category}>
+                    <h2>{category.category}</h2>
+                    {category.items.map(menu => <Menu key={menu.item_id} menu={menu} />)}
+                </div>
+            ))}
+        </React.StrictMode>
+    );
+}
+
+
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+

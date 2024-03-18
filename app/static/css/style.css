@@ -59,3 +59,17 @@ body {
     padding: 10px;
     font-size: 12px;
 }
+
+.stroke-text {
+    text-shadow: 2px 2px 0px #000;
+    /* Simple text stroke effect */
+}
+
+.store-button {
+    background-color: #D3D3D3;
+    /* Light gray */
+    border: none;
+    box-shadow: none;
+    font-weight: bold;
+    /* Bold font */
+}
