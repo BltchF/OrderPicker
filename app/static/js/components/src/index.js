@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import reportWebVitals from './reportWebVitals';
 import Menu from './Menu';
+// import reportWebVitals from './reportWebVitals'; 測試用
+// reportWebVitals();
 
-function App(){
+function MenuDisplay(){
     const [categories, setCategories] = useState([]);
     useEffect(() => {
         fetch(`/api/menus?store=${window.storeName}`)
@@ -15,7 +16,7 @@ function App(){
         <React.StrictMode>
             {categories.map(category => (
                 <div key={category.category}>
-                    <h2>{category.category}</h2>
+                    <h3 style={{backgroundColor: 'gray'}}>{category.category}</h3>
                     {category.items.map(menu => <Menu key={menu.item_id} menu={menu} />)}
                 </div>
             ))}
@@ -25,9 +26,9 @@ function App(){
 
 
 ReactDOM.render(
-  <App />,
-  document.getElementById('root')
+    <MenuDisplay />,
+    document.getElementById('root')
 );
 
-reportWebVitals();
+
 

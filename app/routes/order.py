@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, session, request, redirect, url_for, jsonify
-from app.models import Order, Store, User, Menu
+from app.models import Order, Store, User, Menu, Addition
 from collections import defaultdict
 import json
 
@@ -86,9 +86,43 @@ def get_menus():
 
     return jsonify(categories)
 
-# TODO: Pending for modification😔
-@bp.route('/get_addons/<item_id>')
+# used by AddonPopup to get the addons for a menu item
+@bp.route('/api/addons')
 def get_addons(item_id):
-    # Query database for addons of the item
-    # ...
-    return jsonify(addons_data)
+    menu_id = request.args.get('menu_id', type=int)
+    if menu_id is None:
+        return jsonify({'error': 'Missing item_id parameter'}), 400
+    
+    try:
+        additions = Addition.query. filter_by(menu_id=menu_id).all()
+        additions_data = [{'id': addition.id, 'add_name': addition.add_name, 'add_price': str(addition.add_price)} for addition in additions]
+    except Exception as e:
+        # Log the error and return an error response
+        print(e)
+        return jsonify({'error': 'An error occurred while fetching the addons'}), 500
+    
+    return jsonify(additions_data)
+
+
+# used by AddonPopup to sent choice of addons to the server
+# ! PROCEDING: not implemented
+@bp.route('/api/selected_addons', methods=['POST'])
+def post_selected_addons():
+    data = request.get_json()
+    if not data:
+        return jsonify({'error': 'No data received'}), 400
+    
+    item_id = data.get('item_id')
+    addons = data.get('addons')
+    if item_id is None or addons is None:
+        return jsonify({'error': 'Missing item_id or addons parameter'}), 400
+    try:
+        # Here you should process the selected addons for the given item_id.
+        # This depends on your application logic and database schema.
+        # For example, you might create new OrderItemAddon objects and save them to the database.
+        pass
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'An error occurred while processing the selected addons'}), 500
+
+    return jsonify({'success': 'Selected addons processed successfully'})

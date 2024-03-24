@@ -1,0 +1,8 @@
+.quantity-selector{
+    max-width: 3rem !important;
+}
+
+.quantity-selector .form-control {
+    width: 100% !important;
+
+}

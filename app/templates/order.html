@@ -3,6 +3,7 @@
 {% block head %}
     {{ super() }}
     <title>Store Order Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='js/components/build/static/css/main.8a0da3ac.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -40,5 +41,5 @@
     <script>
         window.storeName = "{{ store.name }}";
     </script>
-    <script src="{{url_for('static', filename='js/components/build/static/js/main.63a1f366.js')}}"></script>
+    <script src="{{url_for('static', filename='js/components/build/static/js/main.c0645dde.js') }}"></script>
 {% endblock %}

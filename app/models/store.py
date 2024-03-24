@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 from sqlalchemy import Enum
+from sqlalchemy.sql import text
 # relative import only works when taking current file as module
 from ..extensions import db
 
@@ -36,6 +37,8 @@ class Order(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     store_id = db.Column(db.Integer, db.ForeignKey('stores.id'), nullable=False)
     status = db.Column(Enum('pending', 'completed', 'cancelled', name='status_enum'), nullable=False)
+    created_at = db.Column(db.DateTime, server_default=text('(CURRENT_TIMESTAMP AT TIME ZONE \'UTC\')'))
+    updated_at = db.Column(db.DateTime, server_default=text('(CURRENT_TIMESTAMP AT TIME ZONE \'UTC\')'), onupdate=text('(CURRENT_TIMESTAMP AT TIME ZONE \'UTC\')'))
 
 class OrderItem(db.Model):
     __tablename__ = 'order_items'
@@ -43,7 +46,7 @@ class OrderItem(db.Model):
     order_id = db.Column(db.Integer, db.ForeignKey('orders.order_id'), nullable=False)
     menu_id = db.Column(db.Integer, db.ForeignKey('menus.item_id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
-    customizations = db.Column(db.JSON)
+    additions = db.relationship('OrderAddition', backref='order_item', lazy=True)
 
 class OrderAddition(db.Model):
     __tablename__ = 'order_additions'

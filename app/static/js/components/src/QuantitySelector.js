@@ -1,5 +1,5 @@
 import React from "react";
-
+import "./QuantitySelector.css";
 
 class QuantitySelector extends React.Component {
     constructor(props) {
@@ -18,20 +18,20 @@ class QuantitySelector extends React.Component {
     }
 
     render() {
-        return (
-            <div className="input-group ml-2">
-                <div className="input-group-prepend">
-                    <button className="btn btn-outline-secondary" type="button"
-                        onClick={this.decreaseQuantity}>-</button>
-                </div>
-                <input type="text" id={`quantity-${this.props.item_id}`} className="form-control" value={this.state.quantity} readOnly />
-                <div className="input-group-append">
-                    <button className="btn btn-outline-secondary" type="button"
-                        onClick={this.increaseQuantity}>+</button>
-                </div>
+    return (
+        <div className="input-group quantity-selector d-flex align-items-center">
+            <div className="input-group-prepend">
+                <button className="btn btn-outline-secondary" type="button"
+                    onClick={this.decreaseQuantity}>-</button>
             </div>
-        );
-    }
+            <input type="text" id={`quantity-${this.props.item_id}`} className="form-control" value={this.state.quantity} readOnly />
+            <div className="input-group-append">
+                <button className="btn btn-outline-secondary" type="button"
+                    onClick={this.increaseQuantity}>+</button>
+            </div>
+        </div>
+    );
+}
 }
 
 export default QuantitySelector;
