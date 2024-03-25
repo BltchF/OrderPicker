@@ -19,28 +19,30 @@
             </div>
             <div class="col-4">
                 <p>H0110W {{username}}</p>
-            </div>
-        </div>
-        <div>
-            <div class="row bg-gray-800 rounded-lg px-4 py-3">
-                <div class="col-12 d-flex flex-row gap-2">
-                    <span>{{message}}</span>
                 </div>
-            </div>
-        </div>
-        <div class="row bg-gray-800 rounded-lg px-4 py-3">
-            <div class="col-12 d-flex flex-row gap-2">
-                <div class="bg-white rounded-full px-4 py-2 d-flex align-items-center">
-                    <p class="text-black text-lg">還沒有想到 1</p>
                 </div>
-                <div class="bg-gray-200 rounded-full px-4 py-2 d-flex align-items-center">
-                    <p class="text-black text-lg">還沒有想到 2</p>
+                {% if message %}
+                <div>
+                    <div class="row bg-gray-800 rounded-lg px-4 py-3">
+                        <div class="col-12 d-flex flex-row gap-2">
+                            <span>{{message}}</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="bg-gray-200 rounded-full px-4 py-2 d-flex align-items-center">
-                    <p class="text-black text-lg">還沒有想到 3</p>
+                {% endif %}
+                <div class="bg-gray-800 rounded-lg px-4 py-3">
+                    <div class="flex flex-row justify-between space-x-2">
+                        <div class="flex-grow bg-white rounded-lg px-2 py-1 flex items-center">
+                            <p class="text-black text-xs">還沒有想到 1</p>
+                        </div>
+                        <div class="flex-grow bg-gray-200 rounded-lg px-2 py-1 flex items-center">
+                            <p class="text-black text-xs">還沒有想到 2</p>
+                        </div>
+                        <div class="flex-grow bg-gray-200 rounded-lg px-2 py-1 flex items-center">
+                            <p class="text-black text-xs">還沒有想到 3</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
 
         <div class="row px-6 py-4">
             <h3 class="text-white text-2xl">功能/店家 清單</h3>

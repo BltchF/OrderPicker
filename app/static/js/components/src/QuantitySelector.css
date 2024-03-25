@@ -1,8 +1,12 @@
-.quantity-selector{
-    max-width: 3rem !important;
+.quantity-selector {
+    display: flex;
+    max-width: 8rem;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 8px;
 }
 
-.quantity-selector .form-control {
+.quantity-selector .form-control-sm {
     width: 100% !important;
 
 }

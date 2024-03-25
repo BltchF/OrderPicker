@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import FunctionBar from './functionBar';
 import Menu from './Menu';
 // import reportWebVitals from './reportWebVitals'; 測試用
 // reportWebVitals();
@@ -14,6 +15,7 @@ function MenuDisplay(){
     }, []);
     return (
         <React.StrictMode>
+            <FunctionBar/>
             {categories.map(category => (
                 <div key={category.category}>
                     <h3 style={{backgroundColor: 'gray'}}>{category.category}</h3>

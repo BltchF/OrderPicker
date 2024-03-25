@@ -3,7 +3,7 @@
 {% block head %}
     {{ super() }}
     <title>Store Order Page</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='js/components/build/static/css/main.8a0da3ac.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='js/components/build/static/css/main.2f4da361.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -18,12 +18,6 @@
             <div class="col d-flex justify-content-start align-items-center pl-3 mt-4">
                 <img src="{{ url_for('static', filename='images/orderpicker.svg') }}" alt="Your Image Description" class="img-fluid">
             </div>
-        </div>
-        <!-- Buttons -->
-        <div class="flex justify-center p-4 space-x-4">
-            <button class="flex-1 bg-green-800 text-white py-2 px-4 rounded text-xs whitespace-nowrap">送出我的單子</button>
-            <button class="flex-1 bg-gray-300 py-2 px-4 rounded text-xs whitespace-nowrap">查看點單</button>
-            <button class="flex-1 bg-yellow-300 py-2 px-4 rounded text-xs whitespace-nowrap">這個功能還沒好</button>
         </div>
 
         <div id="root"></div>
@@ -41,5 +35,5 @@
     <script>
         window.storeName = "{{ store.name }}";
     </script>
-    <script src="{{url_for('static', filename='js/components/build/static/js/main.c0645dde.js') }}"></script>
+    <script src="{{url_for('static', filename='js/components/build/static/js/main.5086675e.js') }}"></script>
 {% endblock %}

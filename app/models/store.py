@@ -39,6 +39,7 @@ class Order(db.Model):
     status = db.Column(Enum('pending', 'completed', 'cancelled', name='status_enum'), nullable=False)
     created_at = db.Column(db.DateTime, server_default=text('(CURRENT_TIMESTAMP AT TIME ZONE \'UTC\')'))
     updated_at = db.Column(db.DateTime, server_default=text('(CURRENT_TIMESTAMP AT TIME ZONE \'UTC\')'), onupdate=text('(CURRENT_TIMESTAMP AT TIME ZONE \'UTC\')'))
+    expires_at = db.Column(db.DateTime, nullable=False)
 
 class OrderItem(db.Model):
     __tablename__ = 'order_items'

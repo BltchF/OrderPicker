@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import QuantitySelector from './QuantitySelector';
 import AddonPopup from './AddonPopup';
 import "./Menu.css";
+import Modal from 'react-modal';
 
 
 function Menu({ menu }) {
@@ -21,15 +22,21 @@ function Menu({ menu }) {
     };
 
     return (
-        <div className="row align-items-center mm">
+        <div className="row py-1 ">
             <div className="col-4">
                 {menu.item_name}
             </div>
-            <div className="col-8 no-wrap reduced-line-height d-flex flex-nowrap">
-                <button className="btn btn-primary" onClick={() => setShowPopup(true)}>調整</button>
+            <div className="col-8 d-flex flex-nowrap align-items-between">
+                <button className="btn btn-primary py-1" onClick={() => setShowPopup(true)}>調整</button>
                 <QuantitySelector item_id={menu.item_id} />
-                <button className="btn btn-primary" onClick={orderItem}>買這個</button>
-                {showPopup && <AddonPopup item_id={menu.item_id} onClose={() => setShowPopup(false)} />}
+                <button className="btn btn-primary py-1" onClick={orderItem}>買這個</button>
+                <Modal 
+                    isOpen={showPopup}
+                    onRequestClose={() => setShowPopup(false)}
+                    contentLabel="Addon Popup"
+                >
+                    <AddonPopup item_id={menu.item_id} onClose={() => setShowPopup(false)} />
+                </Modal>
             </div>
         </div>
     );

@@ -1,4 +1,8 @@
 /* Default text size */
+.menu-row{
+    margin-top:  2px;
+    margin-bottom: 2px;
+}
 .btn {
     font-size: 12px;
 }
@@ -6,15 +10,6 @@
 /* Smaller text size for viewports less than 600px wide */
 @media (max-width: 400px) {
     .btn {
-        font-size: 5px !important;
+        font-size: 8px !important;
     }
 }
-
-.no-wrap{
-    flex-wrap: nowrap !important;
-}
-
-.reduced-line-height {
-    line-height: 0.8;
-}
-
