@@ -10,3 +10,8 @@
     width: 100% !important;
 
 }
+
+
+.input-group .btn {
+    z-index: 0;
+}
