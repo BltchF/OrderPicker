@@ -56,7 +56,6 @@ def get_message_reply_mapping():
     login_url = url_for('auth.login', _external=True, _scheme='https')
     return [
         (lambda message: "i wanna order" in message, f"please visit {login_url}"),
-        (lambda message: "help" in message, "Send 'Take my order' to get the order link."),
         (lambda message: "fuck you" in message, "fuck you too"),
         (lambda message: "推薦餐點" in message, "推薦你媽"),
         (lambda message: "點餐" in message, "點妳媽"),

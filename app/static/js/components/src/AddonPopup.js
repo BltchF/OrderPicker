@@ -5,7 +5,6 @@ function AddonPopup({ item_id, onClose }) {
     const [addons, setAddons] = React.useState([]);
     const [selectedAddons, setSelectedAddons] = React.useState([]);
     
-    // ! TODO: Fetch addons
     React.useEffect(() => {
     fetch(`/api/addons?item_id=${item_id}`)
         .then(response => response.json())
@@ -17,33 +16,38 @@ function AddonPopup({ item_id, onClose }) {
         }, [item_id]);
 
     function handleCheckboxChange(id) {
-        setSelectedAddons(prevSelectedAddons =>
-            prevSelectedAddons.includes(id)
-                ? prevSelectedAddons.filter(addonId => addonId !== id)
-                : [...prevSelectedAddons, id]
-        );
-    }
+    const addon = addons.find(addon => addon.id === id);
+    setSelectedAddons(prevSelectedAddons =>
+        prevSelectedAddons.some(prevAddon => prevAddon.id === id)
+            ? prevSelectedAddons.filter(prevAddon => prevAddon.id !== id)
+            : [...prevSelectedAddons, addon]
+    );
+}
 
     function handleCheck() {
-        fetch('/api/selected_addons', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                item_id: item_id,
-                addons: selectedAddons,
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                onClose();
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-    }
+    //! Replace order_item_id
+    const order_item_id = ; /* The ID of the OrderItem that the addons are being added to */
+    const addition_ids = selectedAddons.map(addon => addon.id);
+
+    fetch('/api/selected_addons', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            order_item_id: order_item_id,
+            addition_ids: addition_ids,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        onClose();
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
 
 return (
     <div className="fixed z-10 inset-0 overflow-y-auto flex items-center justify-center">
@@ -71,10 +75,12 @@ return (
                     </ul>
                 </div>
                 <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse z-10">
-                    <button type="button" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm" onClick={handleCheck}>
+                    <button type="button" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm" 
+                    onClick={handleCheck}>
                         Check
                     </button>
-                    <button type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm" onClick={onClose}>
+                    <button type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm" 
+                    onClick={onClose}>
                         Cancel
                     </button>
                 </div>

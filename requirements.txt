@@ -1,6 +1,9 @@
-flask
-line-bot-sdk
-flask_sqlalchemy
-flask_migrate==2.5.3
+line-bot-sdk==3.9.0
 python-dotenv==0.19.1
 psycopg2==2.9.9
+SQLAlchemy==2.0.27
+Flask-APScheduler==1.13.1
+Flask-Migrate==4.0.5
+flask-ngrok==0.0.25
+Flask-SQLAlchemy==3.1.1
+Flask==3.0.1
