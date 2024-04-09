@@ -1,26 +1,9 @@
 from flask import Blueprint, request, jsonify
-from app.models import OrderItem, OrderAddition, Order, Menu, Addition
+from app.models import OrderItem, OrderAddition, Order, Menu, Addition, User
 from app.extensions import db
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 bp = Blueprint('order_action', __name__)
-
-# ==================Function related to Order List Operations==================
-def create_order_additions(order_item_id, addons):
-    for addon_id in addons:
-        order_addition = OrderAddition(order_item_id=order_item_id, addition_id=addon_id)
-        db.session.add(order_addition)
-
-def delete_order_additions(order_item_id):
-    OrderAddition.query.filter_by(order_item_id=order_item_id).delete()
-
-def renew_order_additions(order_item_id, addons):
-    delete_order_additions(order_item_id)
-    create_order_additions(order_item_id, addons)
-
-# =============================================================================
-
-
 
 
 @bp.route('/api/selected_addons', methods=['POST'])
@@ -58,54 +41,130 @@ def post_selected_addons():
 
     return jsonify({'success': 'Selected addons processed successfully'})
 
-
-
-
-
-@bp.route('/api/order', methods=['POST'])
-def post_order():
-    data = request.get_json()
+# ==================Function related to Order Operations=================
+def validate_request(data):
     if not data:
-        return jsonify({'error': 'No data received'}), 400
+        return False, jsonify({'error': 'No data received'}), 399, None
 
     store_id = data.get('store_id')
     items = data.get('items')
     user_id = data.get('user_id')
-    if store_id is None or items is None or user_id is None:
-        return jsonify({'error': 'Missing store_id, user_id or items parameter'}), 400
+    if store_id is None or items is None or user_id is None or not isinstance(items, list):
+        return False, jsonify({'error': 'Missing or invalid store_id, user_id or items parameter'}), 399, None
 
-    # Try to find an existing order for the user that hasn't expired
-    now = datetime.now(datetime.UTC)
-    order = Order.query.filter(Order.user_id == user_id, Order.status == 'pending', Order.expires_at > now).first()
-
-    # If no such order exists, create a new one
-    if not order:
-        order = Order(user_id=user_id, store_id=store_id, status='pending')
-        db.session.add(order)
-        db.session.flush()
-
-    # Update the order's expires_at time
-    order.expires_at = now + timedelta(minutes=30)
-
-    # For each item in the order, create a new OrderItem
     for item in items:
+        if not isinstance(item, dict) or 'item_id' not in item or 'quantity' not in item or not isinstance(item['quantity'], int):
+            return False, jsonify({'error': 'Invalid item'}), 399, None
+        additions = item.get('additions')
+        if additions is not None and not isinstance(additions, list):
+            return False, jsonify({'error': 'Invalid additions'}), 399, None
+
+    return True, store_id, items, user_id
+
+def get_or_create_order(user_id, store_id):
+    order = Order.query.filter_by(user_id=user_id, store_id=store_id, status='pending').first()
+    if not order:
+        expires_at = datetime.now(timezone.utc) + timedelta(minutes=30)
+        order = Order(user_id=user_id, store_id=store_id, status='pending', expires_at=expires_at)
+        db.session.add(order)
+        db.session.commit()
+    return order
+
+def process_items(items, order):
+    for item in items:
+        if not isinstance(item, dict) or 'item_id' not in item or 'quantity' not in item:
+            return False, jsonify({'error': 'Invalid item'}), 400
+
         menu = Menu.query.get(item['item_id'])
         if not menu:
-            return jsonify({'error': f"Menu item {item['item_id']} not found"}), 400
+            return False, jsonify({'error': f"Menu item {item['item_id']} not found"}), 400
 
-        order_item = OrderItem(order_id=order.id, menu_id=menu.id, quantity=item['quantity'])
+        order_item = OrderItem(order_id=order.order_id, menu_id=menu.item_id, quantity=item['quantity'])
         db.session.add(order_item)
-        db.session.flush()
 
-        # If the item has additions, create new OrderAddition objects
         if 'additions' in item:
             for addition_id in item['additions']:
                 addition = Addition.query.get(addition_id)
-                if addition:  # Only add the addition if it exists
-                    order_addition = OrderAddition(order_item_id=order_item.id, addition_id=addition.id)
-                    db.session.add(order_addition)
-            db.session.flush()
+                if not addition:
+                    return False, jsonify({'error': f"Addition {addition_id} not found"}), 400
 
-    db.session.commit()
+                order_addition = OrderAddition(order_item_id=order_item.id, addition_id=addition.id)
+                db.session.add(order_addition)
+
+        # Extend the order's expiry time by 30 minutes every time a new item is added
+        order.expires_at = datetime.now(timezone.utc) + timedelta(minutes=30)
+
+    return True, None, None
+
+@bp.route('/api/order', methods=['POST'])
+def post_order():
+    data = request.get_json()
+
+    valid, store_id, items, user_id = validate_request(data)
+    if not valid:
+        return store_id, items
+
+    order = get_or_create_order(user_id, store_id)
+    if not order:
+        return jsonify({'error': 'Failed to get or create order'}), 500
+
+    try:
+        result = process_items(items, order)
+        if not result:
+            return jsonify({'error': 'Failed to process items'}), 500
+
+        success, response, status = result
+        if not success:
+            return response, status
+
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print(e)  # Log the exception
+        return jsonify({'error': str(e)}), 500
 
     return jsonify({'success': 'Order processed successfully'})
+
+# function for cart component to get the current order
+@bp.route('/api/order', methods=['GET'])
+def get_order():
+    user_id = request.args.get('user_id')
+    if user_id is None:
+        return jsonify({'error': 'Missing user_id parameter'}), 400
+
+    now = datetime.now(timezone.utc)
+    order = Order.query.filter(Order.user_id == user_id, Order.status == 'pending', Order.expires_at > now).first()
+    if not order:
+        return jsonify({'error': 'No pending order found'}), 404
+
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    order_items = OrderItem.query.filter(OrderItem.order_id == order.order_id).all()
+    items = []
+    total_price = 0
+    for order_item in order_items:
+        menu = Menu.query.get(order_item.menu_id)
+        additions = OrderAddition.query.filter(OrderAddition.order_item_id == order_item.id).all()
+        addition_details = []
+        for addition in additions:
+            addition_item = Addition.query.get(addition.addition_id)
+            addition_details.append({
+                'name': addition_item.add_name,
+                'price': addition_item.add_price
+            })
+            total_price += addition_item.add_price * order_item.quantity
+
+        items.append({
+            'name': menu.item_name,
+            'quantity': order_item.quantity,
+            'additions': addition_details
+        })
+        total_price += menu.price * order_item.quantity
+
+    return jsonify({
+        'user': user.name,
+        'items': items,
+        'total_price': total_price
+    })

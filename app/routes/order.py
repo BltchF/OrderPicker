@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 import json
 from app.extensions import db
 
+
 bp = Blueprint('order', __name__)
 
 
@@ -36,6 +37,16 @@ from flask import jsonify
 
 @bp.route('/order')
 def order():
+    # Check if a user is in the session
+    if 'user_id' not in session:
+        # No user in the session, redirect to login page
+        return redirect(url_for('auth.login'))
+    
+    user = User.query.get(session['user_id'])
+    if not user:
+        # User not found, redirect to login page
+        return redirect(url_for('auth.login'))
+
     store_name = request.args.get('store')
     if not store_name:
         return redirect(url_for('order.index'))
@@ -52,7 +63,8 @@ def order():
         print(e)
         return redirect(url_for('error_page'))
 
-    return render_template('order.html', store=store)
+    # Render the order template with the user_id and store
+    return render_template('order.html', user_id=user.id, store=store)
 
 @bp.route('/api/menus')
 def get_menus():
@@ -66,6 +78,7 @@ def get_menus():
             'item_name': menu.item_name,
             'category': menu.category,
             'price': str(menu.price),
+            'store_id': menu.store_id,
         }
 
     try:

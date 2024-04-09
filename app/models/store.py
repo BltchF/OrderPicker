@@ -26,6 +26,7 @@ class Menu(db.Model):
 class Addition(db.Model):
     __tablename__ = 'additions'
     id = db.Column(db.Integer, primary_key=True)
+    # !menu_id 應該要改成 item_id
     menu_id = db.Column(db.Integer, db.ForeignKey('menus.item_id'), nullable=False)
     add_name = db.Column(db.String(128), nullable=False)
     add_price = db.Column(db.Numeric(10, 2))

@@ -6,3 +6,6 @@ app/tests/
 node_modules/
 build/
 dist/
+migrations/versions/*
+migrations/env.py
+migrations/alembic.ini

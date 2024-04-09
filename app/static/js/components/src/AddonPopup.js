@@ -1,7 +1,7 @@
 import React from 'react';
 import './AddonPopup.css';
 
-function AddonPopup({ item_id, onClose }) {
+function AddonPopup({ item_id, onAddAddon, onClose }) {
     const [addons, setAddons] = React.useState([]);
     const [selectedAddons, setSelectedAddons] = React.useState([]);
     
@@ -17,37 +17,18 @@ function AddonPopup({ item_id, onClose }) {
 
     function handleCheckboxChange(id) {
     const addon = addons.find(addon => addon.id === id);
-    setSelectedAddons(prevSelectedAddons =>
-        prevSelectedAddons.some(prevAddon => prevAddon.id === id)
-            ? prevSelectedAddons.filter(prevAddon => prevAddon.id !== id)
-            : [...prevSelectedAddons, addon]
-    );
-}
+    setSelectedAddons(selectedAddons =>
+        selectedAddons.some(selectedAddon => selectedAddon.id === id)
+            ? selectedAddons.filter(selectedAddon => selectedAddon.id !== id)
+            : [...selectedAddons, addon]
+        );
+    }
 
     function handleCheck() {
-    //! Replace order_item_id
-    const order_item_id = ; /* The ID of the OrderItem that the addons are being added to */
-    const addition_ids = selectedAddons.map(addon => addon.id);
-
-    fetch('/api/selected_addons', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            order_item_id: order_item_id,
-            addition_ids: addition_ids,
-        }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-        onClose();
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-}
+    onAddAddon(selectedAddons);
+    localStorage.setItem('selectedAddons', JSON.stringify(selectedAddons));
+    onClose();
+    }
 
 return (
     <div className="fixed z-10 inset-0 overflow-y-auto flex items-center justify-center">
@@ -66,7 +47,7 @@ return (
                                 <span className="text-gray-700">{addon.add_name}</span>
                                 <input
                                     type="checkbox"
-                                    checked={selectedAddons.includes(addon.id)}
+                                    checked={selectedAddons.some(selectedAddons => selectedAddons.id === addon.id)}
                                     onChange={() => handleCheckboxChange(addon.id)}
                                     className="form-checkbox h-5 w-5 text-blue-600"
                                 />

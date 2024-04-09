@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from ..extensions import db 
 
 class User(db.Model):
@@ -7,10 +7,10 @@ class User(db.Model):
     name = db.Column(db.String(128), nullable=False)
     picture_url = db.Column(db.String(255), nullable=True)
     line_id = db.Column(db.String(128), unique=True, nullable=False)
-    privilege = db.Column(db.Enum('user', 'admin', 'teacher',name='privilege_enum'), nullable=False, default='user')
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
+    privilege = db.Column(db.Enum('user', 'admin', 'teacher', name='privilege_enum'), nullable=False, default='user')
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
+
     # Assuming you want to establish a relationship with the Role model through UserRole
     roles = db.relationship('Role', secondary='user_roles', back_populates='users')
 
