@@ -11,8 +11,6 @@ const addonStyle = css`
 `;
 
 function TempStoreAddon({ selectedAddons }) {
-    console.log(selectedAddons); // debug information, should be removed later
-
     const flatSelectedAddons = selectedAddons.flat();
 
 

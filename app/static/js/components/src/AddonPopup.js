@@ -1,7 +1,56 @@
 import React from 'react';
-import './AddonPopup.css';
+import Modal from 'react-modal';
+import styled from "@emotion/styled";
 
-function AddonPopup({ item_id, onAddAddon, onClose }) {
+const modalStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        padding: '1rem',
+        backgroundColor: 'rgb(19, 18, 29)',
+        borderRadius: '0.375rem',
+        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+        border: 'none',
+        width: '90wv',
+    },
+    overlay: {
+        backgroundColor: 'rgba(2, 27, 55, 0.5)',
+        backdropFilter: 'blur(5px)',
+    },
+};
+
+const StyledLi = styled.li`
+    text-align: left;
+    padding: 2rem;
+`;
+
+const StyledInput = styled.input`
+    padding-left: 2rem;
+`;
+
+const StyledButton = styled.button`
+    &:first-of-type {
+        background-color: blue;
+        border: 1px solid white;
+        color: white;
+    }
+
+    &:last-of-type {
+        background-color: gray;
+        border: 1px solid white;
+        color: white;
+    }
+`;
+
+const StyledContainer = styled.div`
+    background-color: white;
+`;
+
+function AddonPopup({ item_id, onAddAddon, isOpen, onClose }) {
     const [addons, setAddons] = React.useState([]);
     const [selectedAddons, setSelectedAddons] = React.useState([]);
     
@@ -24,50 +73,41 @@ function AddonPopup({ item_id, onAddAddon, onClose }) {
     }
 
     function handleCheck() {
-    onAddAddon(selectedAddons);
-    localStorage.setItem('selectedAddons', JSON.stringify(selectedAddons));
-    onClose();
-    }
+        onAddAddon(selectedAddons);
+        localStorage.setItem('selectedAddons', JSON.stringify(selectedAddons));
+        onClose();
+        }
 
 return (
-    <div className="fixed z-10 inset-0 overflow-y-auto flex items-center justify-center">
-        <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div className="absolute inset-0 bg-gray-500"></div>
-            </div>
-
-            <div className="inline-block align-middle bg-white rounded-lg 
-            text-left overflow-hidden shadow-xl transform transition-all 
-            sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 z-10">
-                    <ul>
-                        {addons.map(addon => (
-                            <li key={addon.id} className="flex items-center justify-between p-2">
-                                <span className="text-gray-700">{addon.add_name}</span>
-                                <input
-                                    type="checkbox"
-                                    checked={selectedAddons.some(selectedAddons => selectedAddons.id === addon.id)}
-                                    onChange={() => handleCheckboxChange(addon.id)}
-                                    className="form-checkbox h-5 w-5 text-blue-600"
-                                />
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse z-10">
-                    <button type="button" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm" 
-                    onClick={handleCheck}>
-                        Check
-                    </button>
-                    <button type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm" 
-                    onClick={onClose}>
-                        Cancel
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <Modal
+        isOpen={isOpen}
+        onRequestClose={onClose}
+        contentLabel="Addon Popup"
+        style={modalStyles}
+    >
+        <StyledContainer>
+            <ul>
+                {addons.map(addon => (
+                    <StyledLi key={addon.id}>
+                        <span>{addon.add_name}</span>
+                        <StyledInput
+                            type="checkbox"
+                            checked={selectedAddons.some(selectedAddons => selectedAddons.id === addon.id)}
+                            onChange={() => handleCheckboxChange(addon.id)}
+                        />
+                    </StyledLi>
+                ))}
+            </ul>
+        </StyledContainer>
+        <StyledButton type="button" onClick={handleCheck}>
+            Check
+        </StyledButton>
+        <StyledButton type="button" onClick={onClose}>
+            Cancel
+        </StyledButton>
+    </Modal>
 );
+
 }
 
 export default AddonPopup;

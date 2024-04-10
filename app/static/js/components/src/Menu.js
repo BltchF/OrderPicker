@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import QuantitySelector from './QuantitySelector';
 import AddonPopup from './AddonPopup';
 import "./Menu.css";
-import Modal from 'react-modal';
 import TempStoreAddon from './TempStoredAddon';
 import axios from 'axios';  
 
@@ -12,11 +11,16 @@ function Menu({ menu, store_id }) {
     const user_id = window.user_id;
     const [quantity, setQuantity] = React.useState(1);
 
-    const handleAddAddon = (addon) => {
-        setSelectedAddons(prevAddons => [...prevAddons, addon]);
+    React.useEffect(() => { // !Degug 等等刪掉
+        console.log('selectedAddons updated:', selectedAddons);
+    }, [selectedAddons]);
+
+    const handleAddAddon = (addons) => {
+        setSelectedAddons(prevAddons => [...prevAddons, ...addons]);
     };
 
     const orderItem = () => {
+        console.log('selectedAddons:', selectedAddons) // !Debug 等等刪掉
         const items = [{
             item_id: menu.item_id,
             quantity: quantity,
@@ -53,13 +57,12 @@ function Menu({ menu, store_id }) {
                         quantity={quantity}
                         setQuantity={setQuantity} />
                     <button className="rounded-md bg-blue-500 py-1 px-1 flex-nowrap" onClick={orderItem}>買這個</button>
-                    <Modal
-                        isOpen={showPopup}
-                        onRequestClose={() => setShowPopup(false)}
-                        contentLabel="Addon Popup"
-                    >
-                        <AddonPopup item_id={menu.item_id} onAddAddon={handleAddAddon} onClose={() => setShowPopup(false)} />
-                    </Modal>
+                    <AddonPopup 
+                        item_id={menu.item_id} 
+                        onAddAddon={handleAddAddon} 
+                        isOpen={showPopup} 
+                        onClose={() => setShowPopup(false)} 
+                    />
                 </div>
             </div>
             <div>
