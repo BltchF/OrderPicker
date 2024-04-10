@@ -9,7 +9,6 @@ function AddonPopup({ item_id, onAddAddon, onClose }) {
     fetch(`/api/addons?item_id=${item_id}`)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             setAddons(data);
         })
         .catch(error => console.error('Error:', error));

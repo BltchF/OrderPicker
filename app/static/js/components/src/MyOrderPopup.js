@@ -4,33 +4,41 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 
-const customStyles = {
-    content: {
-        top: '50%',
-        maxHeight: '90vh',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)',
-        background: 'black',
-        borderRadius: '4px',
-        padding: '20px',
-        color: '#ffffff',
-        overflow: 'auto'
-    },
-    overlay: {
-        backgroundColor: '#181818'
-    }
-};
-
 const user_id = window.user_id;
 
-//-----style start-----
-const titleStyle = css`fontSize: 1.8rem;`;
-const itemStyle = css`fontSize: 1.4rem; color: lightorange;`;
-const additionStyle = css`fontSize: 1rem;`;
-const itemContainerStyle = css`marginBottom: 1rem;`;
+const customStyles = {
+        content: {
+            top: '50%',
+            left: '50%',
+            maxHeight: '90vh',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '10vw',
+            marginLeft: '10vw',
+            transform: 'translate(-50%, -50%)',
+            background: 'black',
+            borderRadius: '4px',
+            padding: '20px',
+            color: '#ffffff',
+            overflow: 'auto'
+        },
+        overlay: {
+            backgroundColor: 'rgba(112, 160, 255, 0.5)',
+            backdropFilter: 'blur(5px)',
+        }
+    };
+const titleStyle = css`
+    fontSize: 1.8rem;
+    marginBottom: 1rem;`;
+const itemStyle = css`
+    fontSize: 1.4rem; color: lightorange;
+    `;
+const additionStyle = css`
+    fontSize: 1rem;
+    `;
+const itemContainerStyle = css`
+    marginBottom: 1rem;
+    `;
 const additionContainerStyle = css`
     marginBottom: 0.5rem;
     display: flex;
@@ -72,14 +80,14 @@ function MyOrderPopup({ isOpen, onRequestClose }) {
             {order && order.items.map((item, index) => (
                 <div key={index} css={itemContainerStyle}>
                     <div css={itemStyle}>{item.name}</div>
-                    <p>Quantity: {item.quantity}</p>
+                    <span>數量: {item.quantity}</span>
                     {item.additions.length > 0 && (
                         <div>
                             <div css={additionStyle}>Additions:</div>
                             {item.additions.map((addition, index) => (
                                 <div key={index} css={additionContainerStyle}>
-                                    <p>Name: {addition.name}</p>
-                                    <p>Price: {addition.price}</p>
+                                    <span>選項: {addition.name}</span>
+                                    <span > $: {addition.price}</span>
                                 </div>
                             ))}
                         </div>

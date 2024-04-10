@@ -6,7 +6,7 @@ import Modal from 'react-modal';
 
 function Menu({ menu, store_id }) {  
     const [showPopup, setShowPopup] = React.useState(false);
-    const [setSelectedAddons] = React.useState([]);
+    const [selectedAddons, setSelectedAddons] = React.useState([]);
     const user_id = window.user_id;
     const [quantity, setQuantity] = React.useState(1);
 
