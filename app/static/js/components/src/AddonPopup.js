@@ -11,7 +11,9 @@ const modalStyles = {
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
         padding: '1rem',
-        backgroundColor: 'rgb(19, 18, 29)',
+        backgroundColor: 'rgba(2, 27, 55, 0.77)',
+        backdropFilter: 'blur(5px)',
+        border: 'solid 0.7px rgb(190, 190, 190)',
         borderRadius: '0.375rem',
         boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
         border: 'none',
@@ -26,15 +28,18 @@ const modalStyles = {
 const StyledContainer = styled.div`
     backgraound-color: rgb(14, 36, 63);
     content-align: center;
+    margin-bottom: 3rem;
 `;
 
 const StyledDiv = styled.div`
+    display: flex;
     text-align: left;
-    padding: 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    justify-content: space-around;
 `;
 
 const StyledInput = styled.input`
-    padding-left: 2rem;
 `;
 const ButtonContainer = styled.div`
     display: flex;
@@ -43,17 +48,19 @@ const ButtonContainer = styled.div`
 
 const StyledButton = styled.button`
     &:first-of-type {
-        background-color: blue;
+        background-color: rgba(10, 65, 80, 0.3);
         border: 1px solid white;
         color: white;
+        border-radius: 0.375rem;
         margin-right: 1rem;
         padding-left: 1rem;
         padding-right: 1rem;
     }
 
     &:last-of-type {
-        background-color: gray;
+        background-color: rgba(2, 3, 6, 0.46);
         border: 1px solid white;
+        border-radius: 0.375rem;
         color: white;
         padding-left: 1rem;
         padding-right: 1rem;

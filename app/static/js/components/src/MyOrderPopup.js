@@ -11,36 +11,32 @@ const customStyles = {
         top: '50%',
         left: '50%',
         maxHeight: '90vh',
+        width: '90vw',
         right: 'auto',
         bottom: 'auto',
-        marginRight: '10vw',
-        marginLeft: '10vw',
         transform: 'translate(-50%, -50%)',
-        background: 'black',
+        background: 'rgba(1, 12, 26, 0.77)',
         borderRadius: '4px',
-        padding: '20px',
+        padding: '1rem',
         color: '#ffffff',
         overflow: 'auto'
     },
     overlay: {
-        backgroundColor: 'rgba(112, 160, 255, 0.5)',
+        backgroundColor: 'rgba(21, 48, 101, 0.63)',
         backdropFilter: 'blur(5px)',
     }
 };
 
 const Title = styled.div`
-    font-size: 1.8rem;
+    font-size: 1.3rem;
     margin-bottom: 1rem;
 `;
 
-const Item = styled.div`
-    font-size: 1.4rem;
+const Item = styled.span`
     color: lightorange;
 `;
 
-const Addition = styled.div`
-    font-size: 1rem;
-`;
+
 
 const ItemContainer = styled.div`
     margin-bottom: 1rem;
@@ -59,32 +55,31 @@ const TitleContainer = styled.div`
 `;
 
 const CloseButton = styled.button`
-    background-color: red;
+    background-color: rgba(237, 50, 50, 0.3);
     color: white;
     border: 1px solid white;
-    border-radius: 50%;
-    padding: 10px 15px;
+    border-radius: 0.3rem;
+    padding: 0.1rem 0.6rem;
     cursor: pointer;
     font-size: 1rem;
     &:hover {
-        background-color: darkred;
+        background-color: rgba(67, 0, 0, 0.58);
     }
 `;
 
 const OrderAddition = ({ addition }) => (
     <AdditionContainer>
         <span>選項: {addition.name}</span>
-        <span > $: {addition.price}</span>
+        <span > +$ {addition.price}</span>
     </AdditionContainer>
 );
 
 const OrderItem = ({ item }) => (
     <ItemContainer>
         <Item>{item.name}</Item>
-        <span>數量: {item.quantity}</span>
+        <span>x {item.quantity}</span>
         {item.additions.length > 0 && (
             <div>
-                <Addition>Additions:</Addition>
                 {item.additions.map((addition, index) => (
                     <OrderAddition key={index} addition={addition} />
                 ))}
