@@ -23,16 +23,21 @@ function MenuDisplay(){
 
     return (
         <React.StrictMode>
-            <FunctionBar/>
+            <FunctionBar />
             {categories.map(category => (
                 <div key={category.category}>
-                    <h3 style={{backgroundColor: 'gray'}}>{category.category}</h3>
-                    {category.items.map(menu => <Menu key={menu.item_id} 
-                    menu={menu} 
-                    store_id={storeId} 
+                    <h3 style={{ backgroundColor: 'gray' }}>{category.category}</h3>
+                    {category.items.map(menu => <Menu key={menu.item_id}
+                        menu={menu}
+                        store_id={storeId}
                     />)}
                 </div>
             ))}
+            <div className="bg-gray-800 p-4">
+                <div className="text-center mb-2">
+                    <button className="btn btn-danger btn-lg w-full">整單完成</button>
+                </div>
+            </div>
         </React.StrictMode>
     );
 }

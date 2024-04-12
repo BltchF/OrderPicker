@@ -13,10 +13,9 @@ const modalStyles = {
         padding: '1rem',
         backgroundColor: 'rgba(2, 27, 55, 0.77)',
         backdropFilter: 'blur(5px)',
-        border: 'solid 0.7px rgb(190, 190, 190)',
+        border: 'solid 1px rgb(241, 241, 241)',
         borderRadius: '0.375rem',
         boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-        border: 'none',
         width: '90wv',
     },
     overlay: {
@@ -25,25 +24,26 @@ const modalStyles = {
     },
 };
 
-const StyledContainer = styled.div`
+const ItemContainer = styled.div`
     backgraound-color: rgb(14, 36, 63);
     content-align: center;
     margin-bottom: 3rem;
 `;
 
-const StyledDiv = styled.div`
+const ItemNameDiv = styled.div`
     display: flex;
     text-align: left;
     padding-left: 2rem;
     padding-right: 2rem;
-    justify-content: space-around;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.57)
 `;
 
-const StyledInput = styled.input`
+const ItemCheckbox = styled.input`
 `;
 const ButtonContainer = styled.div`
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
 `;
 
 const StyledButton = styled.button`
@@ -104,20 +104,20 @@ function AddonPopup({ item_id, onAddAddon, isOpen, onClose }) {
             contentLabel="Addon Popup"
             style={modalStyles}
         >
-            <StyledContainer>
+            <ItemContainer>
                 <div>
                     {addons.map(addon => (
-                        <StyledDiv key={addon.id}>
+                        <ItemNameDiv key={addon.id}>
                             <span>{addon.add_name}</span>
-                            <StyledInput
+                            <ItemCheckbox
                                 type="checkbox"
                                 checked={selectedAddons.some(selectedAddons => selectedAddons.id === addon.id)}
                                 onChange={() => handleCheckboxChange(addon.id)}
                             />
-                        </StyledDiv>
+                        </ItemNameDiv>
                     ))}
                 </div>
-            </StyledContainer>
+            </ItemContainer>
             <ButtonContainer>
             <StyledButton type="button" onClick={handleCheck}>
                 Check

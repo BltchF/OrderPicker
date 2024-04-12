@@ -43,8 +43,9 @@ const ItemContainer = styled.div`
 `;
 
 const AdditionContainer = styled.div`
-    margin-bottom: 0.5rem;
-    display: flex;
+    jdisplay: flex;
+    text-font: 1rem;
+    text-color: argb(255, 255, 255, rgb(122, 215, 255)0.7);
     justify-content: space-between;
 `;
 
