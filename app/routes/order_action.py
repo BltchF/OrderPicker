@@ -168,3 +168,20 @@ def get_order():
         'items': items,
         'total_price': total_price
     })
+
+# function to delete an item from the order
+@bp.route('/api/order/<int:item_id>', methods=['DELETE'])
+def delete_item(item_id):
+    item = OrderItem.query.get(item_id)
+    if item is None:
+        return jsonify({'error': 'Item not found'}), 404
+
+    try:
+        db.session.delete(item)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print(e)  # Log the exception
+        return jsonify({'error': str(e)}), 500
+
+    return jsonify({'success': 'Item deleted successfully'})

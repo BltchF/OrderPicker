@@ -44,8 +44,8 @@ const ItemContainer = styled.div`
 
 const AdditionContainer = styled.div`
     jdisplay: flex;
-    text-font: 1rem;
-    text-color: argb(255, 255, 255, rgb(122, 215, 255)0.7);
+    font-size: 0.8rem;
+    color: rgb(114, 180, 255);
     justify-content: space-between;
 `;
 
@@ -68,6 +68,16 @@ const CloseButton = styled.button`
     }
 `;
 
+const DeleteItemButton = styled.button`
+    background-color: rgba(237, 50, 50, 0.3);
+    color: white;
+    border: 1px solid white;
+    border-radius: 0.3rem;
+    padding: 0.1rem 0.6rem;
+    cursor: pointer;
+    font-size: 0.7rem;
+`;
+
 const OrderAddition = ({ addition }) => (
     <AdditionContainer>
         <span>選項: {addition.name}</span>
@@ -75,10 +85,15 @@ const OrderAddition = ({ addition }) => (
     </AdditionContainer>
 );
 
-const OrderItem = ({ item }) => (
+const OrderItem = ({ item, handleDelete }) => (
     <ItemContainer>
-        <Item>{item.name}</Item>
-        <span>x {item.quantity}</span>
+        <div style={{display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid white'}}>
+            <div>
+            <Item>{item.name} </Item>
+            <span>x {item.quantity}</span>
+            </div>
+            <DeleteItemButton onClick={() => handleDelete(item.id)}>刪除</DeleteItemButton>
+        </div>
         {item.additions.length > 0 && (
             <div>
                 {item.additions.map((addition, index) => (
@@ -104,6 +119,19 @@ function MyOrderPopup({ isOpen, onRequestClose }) {
         }
     }, [isOpen]);
 
+    const handleDelete = (itemId) => {
+    axios.delete(`/api/order/${itemId}`)
+        .then(() => {
+            setOrder(prevOrder => ({
+                ...prevOrder,
+                items: prevOrder.items.filter(item => item.id !== itemId)
+            }));
+        })
+        .catch(error => {
+            console.error('Error deleting item:', error);
+        });
+    };
+
     return (
         <Modal
             isOpen={isOpen}
@@ -116,7 +144,10 @@ function MyOrderPopup({ isOpen, onRequestClose }) {
                 <CloseButton onClick={onRequestClose}>Close</CloseButton>
             </TitleContainer>
             {order && order.items.map((item, index) => (
-                <OrderItem key={index} item={item} />
+                <div key={index}>
+                    <OrderItem item={item} handleDelete={handleDelete}/>
+
+                </div>
             ))}
             <CloseButton onClick={onRequestClose}>Close</CloseButton>
         </Modal>
