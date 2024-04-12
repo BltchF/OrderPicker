@@ -11,10 +11,6 @@ function Menu({ menu, store_id }) {
     const user_id = window.user_id;
     const [quantity, setQuantity] = React.useState(1);
 
-    React.useEffect(() => { // !Degug 等等刪掉
-        console.log('selectedAddons updated:', selectedAddons);
-    }, [selectedAddons]);
-
     const handleAddAddon = (addons) => {
         setSelectedAddons(prevAddons => [...prevAddons, ...addons]);
     };

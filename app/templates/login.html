@@ -9,26 +9,25 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
 </head>
-<body class="d-flex align-items-center justify-content-center vh-100">
-<div class="card p-4 shadow">
+<body class="d-flex align-items-center justify-content-center vh-100 bg-dark"></body>
+<div class="card p-1 shadow bg-dark">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-12 col-md-8 col-lg-6">
+            <div class="col-12 col-md-8 col-lg-6 bg-dark">
                 <!-- Login form goes here -->
-                <button class="btn btn-light mb-4"><i class="fas fa-arrow-left">www</i></button>
-                <h2 class="text-center font-weight-bold mb-6">歡迎來到 歐德皮克</h2>
+                <h2 class="text-center font-weight-bold mb-6 text-white">歡迎來到 歐德皮克</h2>
                 <h6 class="text-right">復興岡站</h6>
-                <h4>準備點餐了嗎?</h4>
+                <h4 class="text-info">準備點餐了嗎?</h4>
                 <div class="mb-4">
-                    <input type="email" placeholder="別打了...這個沒用" class="form-control">
-                    <input type="password" placeholder="這個也沒用..." class="form-control mt-2">
+                    <input type="email" placeholder="別打了...這個沒用" class="form-control bg-dark">
+                    <input type="password" placeholder="這個也沒用..." class="form-control mt-2 bg-dark">
                     <a href="#" class="text-primary text-sm float-right mt-2">忘記密碼?(雖然也沒什麼密碼)</a>
                 </div>
                 <button class="btn btn-dark btn-block py-2 mt-6">去用line登入</button>
                 <p class="text-center mt-4 text-muted">Or Login with</p>
-                <div class="d-flex justify-content-center mt-4">
+                <div class="d-flex justify-content-center mt-4 border border-2 border-success py-4 rounded">
                     <a href="{{ line_oauth_url }}">
-                        <i class="lni lni-line">LINE login</i> 
+                        <i class="lni lni-line h1">LINE login</i> 
                     </a>
                 </div>
                 <p class="text-center mt-6 text-sm text-muted">Don't have an account? 

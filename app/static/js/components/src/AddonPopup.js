@@ -23,7 +23,12 @@ const modalStyles = {
     },
 };
 
-const StyledLi = styled.li`
+const StyledContainer = styled.div`
+    backgraound-color: rgb(14, 36, 63);
+    content-align: center;
+`;
+
+const StyledDiv = styled.div`
     text-align: left;
     padding: 2rem;
 `;
@@ -31,24 +36,31 @@ const StyledLi = styled.li`
 const StyledInput = styled.input`
     padding-left: 2rem;
 `;
+const ButtonContainer = styled.div`
+    display: flex;
+    justify-content: space-around;
+`;
 
 const StyledButton = styled.button`
     &:first-of-type {
         background-color: blue;
         border: 1px solid white;
         color: white;
+        margin-right: 1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
 
     &:last-of-type {
         background-color: gray;
         border: 1px solid white;
         color: white;
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
 `;
 
-const StyledContainer = styled.div`
-    background-color: white;
-`;
+
 
 function AddonPopup({ item_id, onAddAddon, isOpen, onClose }) {
     const [addons, setAddons] = React.useState([]);
@@ -78,36 +90,37 @@ function AddonPopup({ item_id, onAddAddon, isOpen, onClose }) {
         onClose();
         }
 
-return (
-    <Modal
-        isOpen={isOpen}
-        onRequestClose={onClose}
-        contentLabel="Addon Popup"
-        style={modalStyles}
-    >
-        <StyledContainer>
-            <ul>
-                {addons.map(addon => (
-                    <StyledLi key={addon.id}>
-                        <span>{addon.add_name}</span>
-                        <StyledInput
-                            type="checkbox"
-                            checked={selectedAddons.some(selectedAddons => selectedAddons.id === addon.id)}
-                            onChange={() => handleCheckboxChange(addon.id)}
-                        />
-                    </StyledLi>
-                ))}
-            </ul>
-        </StyledContainer>
-        <StyledButton type="button" onClick={handleCheck}>
-            Check
-        </StyledButton>
-        <StyledButton type="button" onClick={onClose}>
-            Cancel
-        </StyledButton>
-    </Modal>
-);
-
+    return (
+        <Modal
+            isOpen={isOpen}
+            onRequestClose={onClose}
+            contentLabel="Addon Popup"
+            style={modalStyles}
+        >
+            <StyledContainer>
+                <div>
+                    {addons.map(addon => (
+                        <StyledDiv key={addon.id}>
+                            <span>{addon.add_name}</span>
+                            <StyledInput
+                                type="checkbox"
+                                checked={selectedAddons.some(selectedAddons => selectedAddons.id === addon.id)}
+                                onChange={() => handleCheckboxChange(addon.id)}
+                            />
+                        </StyledDiv>
+                    ))}
+                </div>
+            </StyledContainer>
+            <ButtonContainer>
+            <StyledButton type="button" onClick={handleCheck}>
+                Check
+            </StyledButton>
+            <StyledButton type="button" onClick={onClose}>
+                Cancel
+            </StyledButton>
+            </ButtonContainer>
+        </Modal>
+    );
 }
 
 export default AddonPopup;
